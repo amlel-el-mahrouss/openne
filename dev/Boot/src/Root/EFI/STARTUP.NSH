@@ -1,0 +1,2 @@
+fs0:
+BOOT\BOOTAA64.EFI
