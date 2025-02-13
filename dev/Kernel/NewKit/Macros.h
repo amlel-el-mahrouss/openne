@@ -127,11 +127,11 @@
 #endif
 
 /// @brief A simple try and die macro.
-#define MUST_TRY(EXPR)   \
-	if (!(EXPR))         \
-	{                    \
-		MUST_PASS(EXPR); \
-		dbg_break_point();       \
+#define MUST_TRY(EXPR)     \
+	if (!(EXPR))           \
+	{                      \
+		MUST_PASS(EXPR);   \
+		dbg_break_point(); \
 	}
 
 #define RTL_ENDIAN(address, value)                              \

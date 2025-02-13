@@ -95,7 +95,7 @@ typedef struct FisRegD2H final
 	Kernel::UInt8 Reserved1 : 1;	// Reserved
 
 	Kernel::UInt8 Status; // Status register
-	Kernel::UInt8 Rerr;  // Error register
+	Kernel::UInt8 Rerr;	  // Error register
 
 	// DWORD 1
 	Kernel::UInt8 Lba0;	  // LBA low register, 7:0

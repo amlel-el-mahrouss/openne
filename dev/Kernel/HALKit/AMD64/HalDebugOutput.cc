@@ -84,7 +84,7 @@ namespace Kernel
 
 		static int x = kFontSizeX, y = kFontSizeY;
 
-		static BOOL not_important = NO;
+		static BOOL important = NO;
 
 		while (index < len)
 		{
@@ -99,17 +99,17 @@ namespace Kernel
 
 			if (bytes[index] == '*')
 			{
-				if (not_important)
-					not_important = NO;
+				if (important)
+					important = NO;
 				else
-					not_important = YES;
+					important = YES;
 
 				++index;
 
 				continue;
 			}
 
-			fb_render_string(tmp_str, y, x, not_important ? RGB(0xff, 0xff, 0xff) : RGB(0x00, 0x00, 0xff));
+			fb_render_string(tmp_str, y, x, (!important) ? RGB(0xff, 0xff, 0xff) : RGB(0x00, 0x00, 0xff));
 
 			if (bytes[index] == '\r')
 			{
