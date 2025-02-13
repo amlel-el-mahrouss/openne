@@ -131,7 +131,7 @@
 	if (!(EXPR))         \
 	{                    \
 		MUST_PASS(EXPR); \
-		return NO;       \
+		dbg_break_point();       \
 	}
 
 #define RTL_ENDIAN(address, value)                              \

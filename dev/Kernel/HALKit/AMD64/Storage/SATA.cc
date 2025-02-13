@@ -27,52 +27,65 @@
 #ifdef __AHCI__
 
 #define kHBAErrTaskFile (1 << 30)
-#define kHBAPxCmdST		0x0001
-#define kHBAPxCmdFre	0x0010
-#define kHBAPxCmdFR		0x4000
-#define kHBAPxCmdCR		0x8000
+#define kHBACmdGhc		(1 << 31)
+#define kHBACmdAE		(0x80000000)
+#define kHBAPxCmdST		(0x0001)
+#define kHBAPxCmdFre	(0x0010)
+#define kHBAPxCmdFR		(0x4000)
+#define kHBAPxCmdCR		(0x8000)
 
-#define kSataLBAMode (1 << 6)
+#define kSATALBAMode (1 << 6)
 
-#define kAhciSRBsy (0x80)
-#define kAhciSRDrq (0x08)
+#define kSATASRBsy (0x80)
+#define kSATASRDrq (0x08)
 
-#define kAhciPortCnt (0x20)
+#define kSATAPortCnt (0x20)
 
-#define kSATAProgIf	  (0x01)
-#define kSATASubClass (0x06)
-#define kSATABar5	  (0x24)
+#define kSATAProgIfAHCI (0x01)
+#define kSATASubClass	(0x06)
+#define kSATABar5		(0x24)
 
-STATIC Kernel::PCI::Device kPCIDevice;
-STATIC HbaMem* kSATAPort				   = nullptr;
+STATIC Kernel::PCI::Device kDevice;
+STATIC HbaMem* kSATA					   = nullptr;
 STATIC Kernel::SizeT kSATAPortIdx		   = 0UL;
 STATIC Kernel::Lba kCurrentDiskSectorCount = 0UL;
+STATIC Kernel::Char kCurrentDiskModel[50]  = {"UNKNOWN SATA DRIVE"};
 
 template <BOOL Write, BOOL CommandOrCTRL, BOOL Identify>
-static Kernel::Void drv_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buffer, Kernel::SizeT sector_sz, Kernel::SizeT size_buffer) noexcept;
+static Kernel::Void drvi_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buffer, Kernel::SizeT sector_sz, Kernel::SizeT size_buffer) noexcept;
 
-static Kernel::Int32 drv_find_cmd_slot(HbaPort* port) noexcept;
+static Kernel::Int32 drvi_find_cmd_slot(HbaPort* port) noexcept;
 
-static Kernel::Void drv_calculate_disk_geometry() noexcept;
+static Kernel::Void drvi_calculate_disk_geometry() noexcept;
 
-static Kernel::Void drv_calculate_disk_geometry() noexcept
+static Kernel::Void drvi_calculate_disk_geometry() noexcept
 {
 	kCurrentDiskSectorCount = 0UL;
 
-	Kernel::UInt8 identify_data[kib_cast(4)] = {};
+	Kernel::UInt8 identify_data[512] = {};
 
-	drv_std_input_output<NO, YES, YES>(0, identify_data, 0, kib_cast(4));
+	drvi_std_input_output<NO, NO, YES>(0, identify_data, 0, 512);
 
 	kCurrentDiskSectorCount = (identify_data[61] << 16) | identify_data[60];
+
+	for (int i = 0; i < 20; i++)
+	{
+		kCurrentDiskModel[i * 2]	 = identify_data[27 + i] >> 8;
+		kCurrentDiskModel[i * 2 + 1] = identify_data[27 + i] & 0xFF;
+	}
+
+	kCurrentDiskModel[40] = '\0';
+
+	kout << "Drive Model: " << kCurrentDiskModel << endl;
 
 	kout << "Disk Size: " << Kernel::number(drv_get_size()) << endl;
 	kout << "Highest Disk LBA: " << Kernel::number(kCurrentDiskSectorCount) << endl;
 }
 
 /// @brief Initializes an AHCI disk.
-/// @param PortsImplemented the amount of kSATAPort that have been detected.
+/// @param PortsImplemented the amount of kSATA that have been detected.
 /// @return if the disk was successfully initialized or not.
-Kernel::Boolean drv_std_init(Kernel::UInt16& ports_impl)
+Kernel::Boolean drv_std_init(Kernel::UInt16& PortsImplemented)
 {
 	using namespace Kernel;
 
@@ -80,102 +93,65 @@ Kernel::Boolean drv_std_init(Kernel::UInt16& ports_impl)
 
 	for (SizeT device_index = 0; device_index < OPENNE_BUS_COUNT; ++device_index)
 	{
-		kPCIDevice = iterator[device_index].Leak(); // And then leak the reference.
+		kDevice = iterator[device_index].Leak(); // And then leak the reference.
 
 		// if SATA and then interface is AHCI...
-		if (kPCIDevice.Subclass() == kSATASubClass &&
-			kPCIDevice.ProgIf() == kSATAProgIf)
+		if (kDevice.Subclass() == kSATASubClass &&
+			kDevice.ProgIf() == kSATAProgIfAHCI)
 		{
-			HbaMem* mem_ahci = (HbaMem*)kPCIDevice.Bar(kSATABar5);
+			kDevice.EnableMmio(kSATABar5);		// Enable the memory index_byte/o for this ahci device.
+			kDevice.BecomeBusMaster(kSATABar5); // Become bus master for this ahci device, so that we can control it.
 
-			kPCIDevice.EnableMmio(kSATABar5);
-			kPCIDevice.BecomeBusMaster(kSATABar5);
+			HbaMem* mem_ahci = (HbaMem*)kDevice.Bar(kSATABar5);
+
+			kout << hex_number((UIntPtr)mem_ahci) << endl;
 
 			Kernel::UInt32 ports_implemented = mem_ahci->Pi;
 			Kernel::UInt16 ahci_index		 = 0;
 
-			const Kernel::UInt16 kMaxPortsImplemented = kAhciPortCnt;
+			const Kernel::UInt16 kMaxPortsImplemented = kSATAPortCnt;
 			const Kernel::UInt32 kSATASignature		  = 0x00000101;
-			const Kernel::UInt8	 kAhciPresent		  = 0x03;
-			const Kernel::UInt8	 kAhciIPMActive		  = 0x01;
+			const Kernel::UInt8	 kSATAPresent		  = 0x03;
+			const Kernel::UInt8	 kSATAIPMActive		  = 0x01;
 
-			ports_impl = ports_implemented;
-
-			while (ports_implemented)
+			while (ahci_index < kMaxPortsImplemented)
 			{
-				kout << "Port is implemented.\r";
-
-				Kernel::UInt8 ipm = (mem_ahci->Ports[ahci_index].Ssts >> 8) & 0x0F;
-				Kernel::UInt8 det = (mem_ahci->Ports[ahci_index].Ssts & 0x0F);
-
-				if (mem_ahci->Ports[ahci_index].Sig == kSATASignature && det == 3 && ipm == 1)
+				if (ports_implemented)
 				{
-					kout << "Port is implemented as SATA.\r";
+					Kernel::UInt8 ipm = (mem_ahci->Ports[ahci_index].Ssts >> 8) & 0x0F;
+					Kernel::UInt8 det = mem_ahci->Ports[ahci_index].Ssts & 0x0F;
 
-					kSATAPortIdx = ahci_index;
-					kSATAPort	 = mem_ahci;
+					HAL::mm_map_page(mem_ahci, mem_ahci, HAL::kMMFlagsWr);
 
-					kSATAPort->Ports[kSATAPortIdx].Cmd &= ~kHBAPxCmdST;	 // Stop processing
-					kSATAPort->Ports[kSATAPortIdx].Cmd &= ~kHBAPxCmdFre; // Stop FIS reception
-
-					while (kSATAPort->Ports[kSATAPortIdx].Cmd & kHBAPxCmdCR)
+					if (mem_ahci->Ports[ahci_index].Sig == kSATASignature && det == 3 && ipm == 1 &&
+						(mem_ahci->Ports[ahci_index].Ssts & 0xF))
 					{
-						kout << "Waiting for command engine to stop...\r";
+						kout << "Port is implemented as SATA.\r";
+
+						kSATAPortIdx = ahci_index;
+						kSATA		 = mem_ahci;
+
+						// Restart the HBA.
+
+						kSATA->Ports[kSATAPortIdx].Cmd &= ~(kHBAPxCmdST | kHBAPxCmdFre); // Disable command and FIS reception
+
+						while (kSATA->Ports[kSATAPortIdx].Cmd & kHBAPxCmdCR)
+							; // Wait for controller to stop
+
+						kSATA->Ports[kSATAPortIdx].Serr = 0xFFFFFFFF; // Clear errors
+						kSATA->Ports[kSATAPortIdx].Is	= 0xFFFFFFFF; // Clear interrupts
+
+						kSATA->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdFre; // Re-enable FIS reception
+						kSATA->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdST;	// Start command engine
+
+						kSATA->Ghc |= kHBACmdAE; // Enable AHCI mode
+
+						HAL::rt_wait_400ns();
+
+						drvi_calculate_disk_geometry();
+
+						return YES;
 					}
-
-					const auto kSATABase = mib_cast(4);
-
-					kSATAPort->Ports[kSATAPortIdx].Clb	= kSATABase + (kSATAPortIdx << 8);
-					kSATAPort->Ports[kSATAPortIdx].Clbu = 0;
-
-					rt_set_memory((VoidPtr)((UIntPtr)kSATAPort->Ports[kSATAPortIdx].Clb), 0, 1024);
-
-					kSATAPort->Ports[kSATAPortIdx].Fb  = kSATABase + (32 << 10) + (kSATAPortIdx << 8);
-					kSATAPort->Ports[kSATAPortIdx].Fbu = 0;
-
-					rt_set_memory((VoidPtr)((UIntPtr)kSATAPort->Ports[kSATAPortIdx].Fb), 0, 256);
-
-					HbaCmdHeader* hdr_cmd = (HbaCmdHeader*)((UIntPtr)kSATAPort->Ports[kSATAPortIdx].Clb);
-
-					for (Int32 i = 0; i < kMaxPortsImplemented; i++)
-					{
-						hdr_cmd[i].Prdtl = 8;
-
-						hdr_cmd[i].Ctba	 = kSATABase + (40 << 10) + (kSATAPortIdx << 13) + (i << 8);
-						hdr_cmd[i].Ctbau = 0;
-
-						rt_set_memory((VoidPtr)((UIntPtr)hdr_cmd[i].Ctba), 0, 256);
-					}
-
-					kSATAPort->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdFre; // Re-enable FIS reception
-					kSATAPort->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdST;	// Re-enable processing
-
-					if (kSATAPort->Bohc & (1 << 0))
-					{
-						kout << "BIOS/OS Handoff enabled.\r";
-					}
-					else
-					{
-						kSATAPort->Bohc |= (1 << 0);
-						kout << "BIOS/OS Handoff enabled for HBA.\r";
-					}
-
-					if (!(kSATAPort->Ghc & (1 << 31))) // Enable ctrler.
-					{
-						kSATAPort->Ghc |= (1 << 31);
-
-						// Read back to confirm
-						if (!(kSATAPort->Ghc & (1 << 31)))
-						{
-							Kernel::ke_panic(RUNTIME_CHECK_BAD_BEHAVIOR, "Failed to enable AHCI Mode.");
-						}
-
-						kout << "AHCI Mode successfully enabled.\r";
-					}
-
-					drv_calculate_disk_geometry();
-
-					return YES;
 				}
 
 				ports_implemented >>= 1;
@@ -189,24 +165,24 @@ Kernel::Boolean drv_std_init(Kernel::UInt16& ports_impl)
 
 Kernel::Boolean drv_std_detected(Kernel::Void)
 {
-	return kCurrentDiskSectorCount > 0;
+	return kDevice.DeviceId() != 0xFFFF && kCurrentDiskSectorCount > 0;
 }
 
 Kernel::Void drv_std_write(Kernel::UInt64 lba, Kernel::Char* buffer, Kernel::SizeT sector_sz, Kernel::SizeT size_buffer)
 {
-	drv_std_input_output<YES, YES, NO>(lba, (Kernel::UInt8*)buffer, sector_sz, size_buffer);
+	drvi_std_input_output<YES, YES, NO>(lba, (Kernel::UInt8*)buffer, sector_sz, size_buffer);
 }
 
 Kernel::Void drv_std_read(Kernel::UInt64 lba, Kernel::Char* buffer, Kernel::SizeT sector_sz, Kernel::SizeT size_buffer)
 {
-	drv_std_input_output<NO, YES, NO>(lba, (Kernel::UInt8*)buffer, sector_sz, size_buffer);
+	drvi_std_input_output<NO, YES, NO>(lba, (Kernel::UInt8*)buffer, sector_sz, size_buffer);
 }
 
-static Kernel::Int32 drv_find_cmd_slot(HbaPort* port) noexcept
+static Kernel::Int32 drvi_find_cmd_slot(HbaPort* port) noexcept
 {
 	Kernel::UInt32 slots = port->Ci;
 
-	for (Kernel::Int32 i = 0; i < (kAhciPortCnt); i++)
+	for (Kernel::Int32 i = 0; i < kSATAPortCnt; i++)
 	{
 		if ((slots & i) == 0)
 			return i;
@@ -218,46 +194,42 @@ static Kernel::Int32 drv_find_cmd_slot(HbaPort* port) noexcept
 }
 
 template <BOOL Write, BOOL CommandOrCTRL, BOOL Identify>
-static Kernel::Void drv_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buffer, Kernel::SizeT sector_sz, Kernel::SizeT size_buffer) noexcept
+static Kernel::Void drvi_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buffer, Kernel::SizeT sector_sz, Kernel::SizeT size_buffer) noexcept
 {
-	auto slot = 0L;
-
-	kSATAPort->Is = -1;
-
-	slot = drv_find_cmd_slot(&kSATAPort->Ports[kSATAPortIdx]);
+	const Kernel::SizeT slot = drvi_find_cmd_slot(&kSATA->Ports[kSATAPortIdx]);
 
 	if (slot == -1)
 		return;
 
-	HbaCmdHeader* command_header = ((HbaCmdHeader*)((Kernel::UInt64)kSATAPort->Ports[kSATAPortIdx].Clb + kSATAPort->Ports[kSATAPortIdx].Clbu));
+	if (size_buffer > mib_cast(4))
+		Kernel::ke_panic(RUNTIME_CHECK_FAILED, "AHCI only supports < 4mb DMA transfers per PRD.");
 
-	Kernel::rt_set_memory(reinterpret_cast<Kernel::VoidPtr>(command_header), 0, sizeof(HbaCmdHeader));
+	if (!Write)
+		Kernel::rt_set_memory(buffer, 0, size_buffer);
 
-	MUST_PASS(command_header);
+	HbaCmdHeader* command_header = ((HbaCmdHeader*)((Kernel::UInt64)(kSATA->Ports[kSATAPortIdx].Clb)));
 
-	command_header += slot;
+	MUST_TRY(command_header != nullptr);
 
-	command_header->Cfl	  = sizeof(FisRegH2D) / sizeof(Kernel::UInt32);
-	command_header->Write = Write;
-	command_header->Prdtl = 1;
+	command_header->Cfl			 = sizeof(FisRegH2D) / sizeof(Kernel::UInt32);
+	command_header->Write		 = Write;
+	command_header->Prdtl		 = 1;
+	command_header->Atapi		 = 0;
+	command_header->Prefetchable = 1;
 
-	HbaCmdTbl* command_table = new HbaCmdTbl();
+	HbaCmdTbl* command_table = ((HbaCmdTbl*)((Kernel::UInt64)(command_header->Ctba)));
 
-	Kernel::rt_set_memory(reinterpret_cast<Kernel::VoidPtr>(command_table), 0, sizeof(HbaCmdTbl));
+	Kernel::rt_set_memory(command_table, 0, sizeof(HbaCmdTbl));
 
 	MUST_PASS(command_table);
 
-	command_table->Prdt[0].Dba		 = ((Kernel::UInt32)(Kernel::UInt64)Kernel::HAL::ihal_get_phys_address(buffer));
-	command_table->Prdt[0].Dbau		 = (((Kernel::UInt64)Kernel::HAL::ihal_get_phys_address(buffer) >> 32));
-	command_table->Prdt[0].Dbc		 = ((size_buffer)-1) | (1 << 31);
-	command_table->Prdt[0].Reserved0 = 0;
+	auto phys_dma_buf = Kernel::HAL::ihal_get_phys_address((Kernel::VoidPtr)buffer);
 
-	command_header->Ctba  = ((Kernel::UInt32)(Kernel::UInt64)Kernel::HAL::ihal_get_phys_address(command_table));
-	command_header->Ctbau = ((Kernel::UInt32)((Kernel::UInt64)Kernel::HAL::ihal_get_phys_address(command_table) >> 32));
+	command_table->Prdt[0].Dba	= ((Kernel::UInt32)(Kernel::UInt64)phys_dma_buf & 0xFFFFFFFF);
+	command_table->Prdt[0].Dbau = (((Kernel::UInt64)phys_dma_buf << 32));
+	command_table->Prdt[0].Dbc	= ((size_buffer)-1) | (1 << 31);
 
-	FisRegH2D* h2d_fis = (FisRegH2D*)(command_table->Cfis);
-
-	Kernel::rt_set_memory(reinterpret_cast<Kernel::VoidPtr>(h2d_fis), 0, sizeof(FisRegH2D));
+	FisRegH2D* h2d_fis = (FisRegH2D*)((Kernel::UInt64)&command_table->Cfis);
 
 	h2d_fis->FisType   = kFISTypeRegH2D;
 	h2d_fis->CmdOrCtrl = CommandOrCTRL;
@@ -273,74 +245,39 @@ static Kernel::Void drv_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buff
 	h2d_fis->Lba4 = (lba >> 32) & 0xFF;
 	h2d_fis->Lba5 = (lba >> 40) & 0xFF;
 
-	h2d_fis->Device = kSataLBAMode;
+	h2d_fis->Device = kSATALBAMode;
 
 	// 28-bit LBA mode, fis is done being configured.
 
 	h2d_fis->CountLow  = sector_sz & 0xFF;
 	h2d_fis->CountHigh = (sector_sz >> 8) & 0xFF;
 
-	while ((kSATAPort->Ports[kSATAPortIdx].Tfd & (kAhciSRBsy | kAhciSRDrq)))
-	{
-		kout << "Waiting for the tfd to be ready...\r";
-	}
-
-	if (kSATAPort->Is & kHBAErrTaskFile)
+	if (kSATA->Is & kHBAErrTaskFile)
 		Kernel::ke_panic(RUNTIME_CHECK_BAD_BEHAVIOR, "AHCI Read disk failure, faulty component.");
 
-	kSATAPort->Ports[kSATAPortIdx].Ci |= (1 << slot);
+	while (kSATA->Ports[kSATAPortIdx].Cmd & (kHBAPxCmdCR | kHBAPxCmdFR))
+		; // Ensure controller is idle
+
+	kSATA->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdFre;
+	kSATA->Ports[kSATAPortIdx].Ci = (1 << slot);
 
 	while (YES)
 	{
-		if ((kSATAPort->Ports[kSATAPortIdx].Ci & (1 << slot)) == 0)
+		if (kSATA->Ports[kSATAPortIdx].Ci == 0)
 			break;
 
-		kout << "Waiting for the slot to be ready:\r";
+		kout << "PxCI: " << Kernel::hex_number(kSATA->Ports[kSATAPortIdx].Ci) << endl;
+		kout << "PxCMD: " << Kernel::hex_number(kSATA->Ports[kSATAPortIdx].Cmd) << endl;
 
-		kout << "CI: " << Kernel::hex_number(kSATAPort->Ports[kSATAPortIdx].Ci) << endl;
-		kout << "TFD: " << Kernel::hex_number(kSATAPort->Ports[kSATAPortIdx].Tfd) << endl;
-
-		if (kSATAPort->Ports[kSATAPortIdx].Tfd == 0x50) // drive failed but is ready.
-		{
-			kSATAPort->Ports[kSATAPortIdx].Cmd &= ~kHBAPxCmdST;	 // Stop processing
-			kSATAPort->Ports[kSATAPortIdx].Cmd &= ~kHBAPxCmdFre; // Stop FIS reception
-
-			while (kSATAPort->Ports[kSATAPortIdx].Cmd & kHBAPxCmdCR)
-			{
-				kout << "Waiting for command engine to stop...\r";
-			}
-
-			kSATAPort->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdFre; // Re-enable FIS reception
-			kSATAPort->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdST;	// Re-enable processing
-
-			kout << "Post reset status:\r";
-
-			kout << "CI: " << Kernel::hex_number(kSATAPort->Ports[kSATAPortIdx].Ci) << endl;
-			kout << "TFD: " << Kernel::hex_number(kSATAPort->Ports[kSATAPortIdx].Tfd) << endl;
-		}
+		if (kSATA->Is & kHBAErrTaskFile)
+			Kernel::ke_panic(RUNTIME_CHECK_BAD_BEHAVIOR, "AHCI Read disk failure, faulty component.");
 	}
-
-	while ((kSATAPort->Ports[kSATAPortIdx].Tfd & (kAhciSRBsy | kAhciSRDrq)))
-	{
-		kout << "Waiting for the tfd to be ready...\r";
-	}
-
-	delete command_table;
-	command_table = nullptr;
-
-	kSATAPort->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdFre; // Re-enable FIS reception
-	kSATAPort->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdST;	// Re-enable processing
-
-	kout << "Post packet status:\r";
-
-	kout << "CI: " << Kernel::hex_number(kSATAPort->Ports[kSATAPortIdx].Ci) << endl;
-	kout << "TFD: " << Kernel::hex_number(kSATAPort->Ports[kSATAPortIdx].Tfd) << endl;
 }
 
 /***
-	@brief Gets the number of sectors inside the drive.
-	@return Sector size in bytes.
- */
+	 @brief Gets the number of sectors inside the drive.
+	 @return Sector size in bytes.
+  */
 Kernel::SizeT drv_get_sector_count()
 {
 	return kCurrentDiskSectorCount;

@@ -103,7 +103,6 @@ namespace Kernel
 								this->GetBitMapStatus(ptr_bit_set);
 
 								UInt32 flags = this->MakeMMFlags(wr, user);
-								mm_map_page(ptr_bit_set, flags);
 
 								return (VoidPtr)ptr_bit_set;
 							}
@@ -119,7 +118,7 @@ namespace Kernel
 							this->GetBitMapStatus(ptr_bit_set);
 
 							UInt32 flags = this->MakeMMFlags(wr, user);
-							mm_map_page(ptr_bit_set, flags);
+							mm_map_page(ptr_bit_set, ptr_bit_set, flags);
 
 							return (VoidPtr)ptr_bit_set;
 						}

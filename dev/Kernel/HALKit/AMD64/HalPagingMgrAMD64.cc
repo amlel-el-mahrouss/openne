@@ -62,7 +62,7 @@ namespace Kernel::HAL
 		kout << (pte->User ? "User" : "Not User") << endl;
 	}
 
-	STATIC Int32 mmi_map_page_table_entry(VoidPtr virtual_address, UInt32 flags, OPENNE_PTE* pt_entry, OPENNE_PDE* pd_entry);
+	STATIC Int32 mmi_map_page_table_entry(VoidPtr virtual_address, VoidPtr physical_address, UInt32 flags, OPENNE_PTE* pt_entry, OPENNE_PDE* pd_entry);
 
 	/***********************************************************************************/
 	/// @brief Maps or allocates a page from virtual_address.
@@ -71,9 +71,10 @@ namespace Kernel::HAL
 	/// @param flags the flags to put on the page.
 	/// @return Status code of page manipulation process.
 	/***********************************************************************************/
-	EXTERN_C Int32 mm_map_page(VoidPtr virtual_address, UInt32 flags)
+	EXTERN_C Int32 mm_map_page(VoidPtr virtual_address, VoidPtr physical_address, UInt32 flags)
 	{
 		if (!virtual_address ||
+			!physical_address ||
 			!flags)
 			return 0;
 
@@ -96,7 +97,7 @@ namespace Kernel::HAL
 		if (page_store.fInternalStore.fVAddr == virtual_address)
 		{
 			page_store.fStoreOp = No;
-			return mmi_map_page_table_entry(page_store.fInternalStore.fVAddr, flags, page_store.fInternalStore.fPte, page_store.fInternalStore.fPde);
+			return mmi_map_page_table_entry(page_store.fInternalStore.fVAddr, physical_address, flags, page_store.fInternalStore.fPte, page_store.fInternalStore.fPde);
 		}
 
 		const auto cPmlEntrySize = 8;
@@ -120,14 +121,14 @@ namespace Kernel::HAL
 		// Lastly, grab the pte entry.
 		OPENNE_PDE* pde_struct = reinterpret_cast<OPENNE_PDE*>(pt_base);
 
-		return mmi_map_page_table_entry(virtual_address, flags, pde_struct->fEntries[pt_entry], pde_struct);
+		return mmi_map_page_table_entry(virtual_address, physical_address, flags, pde_struct->fEntries[pt_entry], pde_struct);
 	}
 
 	/***********************************************************************************/
 	/// @brief Maps flags for a specific pte.
 	/// @internal Internal function.
 	/***********************************************************************************/
-	STATIC Int32 mmi_map_page_table_entry(VoidPtr virtual_address, UInt32 flags, OPENNE_PTE* pt_entry, OPENNE_PDE* pd_entry)
+	STATIC Int32 mmi_map_page_table_entry(VoidPtr virtual_address, VoidPtr physical_address, UInt32 flags, OPENNE_PTE* pt_entry, OPENNE_PDE* pd_entry)
 	{
 		if (!pt_entry)
 			return 1;
@@ -149,6 +150,8 @@ namespace Kernel::HAL
 		else if (flags & ~kMMFlagsUser)
 			pt_entry->User = false;
 
+		pt_entry->PhysicalAddress = (UInt32)(UIntPtr)physical_address;
+
 		hal_invl_tlb(reinterpret_cast<VoidPtr>(pt_entry));
 
 		mmi_page_status(pt_entry);
@@ -164,5 +167,26 @@ namespace Kernel::HAL
 		page_store.fStoreOp = No;
 
 		return 0;
+	}
+
+	UInt64 ihal_get_phys_address(VoidPtr virtual_address)
+	{
+		UInt64 addr = (UInt64)virtual_address;
+		UInt64 cr3	= (UInt64)hal_read_cr3();
+
+		// Extract indices for PML4, PDPT, PD, and PT
+		UInt64 pml4_idx = (addr >> 39) & 0x1FF;
+		UInt64 pdpt_idx = (addr >> 30) & 0x1FF;
+		UInt64 pd_idx	= (addr >> 21) & 0x1FF;
+		UInt64 pt_idx	= (addr >> 12) & 0x1FF;
+
+		// Get PML4 Table
+		UInt64* pml4 = (UInt64*)(cr3 & ~0xFFF);
+		UInt64* pdpt = (UInt64*)(pml4[pml4_idx] & ~0xFFF);
+		UInt64* pd	 = (UInt64*)(pdpt[pdpt_idx] & ~0xFFF);
+		UInt64* pt	 = (UInt64*)(pd[pd_idx] & ~0xFFF);
+
+		// Get Physical Address
+		return (pt[pt_idx] & ~0xFFF) + (addr & 0xFFF);
 	}
 } // namespace Kernel::HAL

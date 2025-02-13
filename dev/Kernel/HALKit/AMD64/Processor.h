@@ -223,26 +223,7 @@ namespace Kernel::HAL
 	}
 
 	/// @internal
-	inline UInt64 ihal_get_phys_address(void* virtual_address)
-	{
-		UInt64 addr = (UInt64)virtual_address;
-		UInt64 cr3	= (UInt64)hal_read_cr3();
-
-		// Extract indices for PML4, PDPT, PD, and PT
-		UInt64 pml4_idx = (addr >> 39) & 0x1FF;
-		UInt64 pdpt_idx = (addr >> 30) & 0x1FF;
-		UInt64 pd_idx	= (addr >> 21) & 0x1FF;
-		UInt64 pt_idx	= (addr >> 12) & 0x1FF;
-
-		// Get PML4 Table
-		UInt64* pml4 = (UInt64*)(cr3 & ~0xFFF);
-		UInt64* pdpt = (UInt64*)(pml4[pml4_idx] & ~0xFFF);
-		UInt64* pd	 = (UInt64*)(pdpt[pdpt_idx] & ~0xFFF);
-		UInt64* pt	 = (UInt64*)(pd[pd_idx] & ~0xFFF);
-
-		// Get Physical Address
-		return (pt[pt_idx] & ~0xFFF) + (addr & 0xFFF);
-	}
+	UInt64 ihal_get_phys_address(VoidPtr virtual_address);
 
 	/// @brief Set Model-specific register.
 	/// @param msr MSR
@@ -318,22 +299,22 @@ namespace Kernel::HAL
 	/// @param phys_addr point to physical address.
 	/// @param flags the flags to put on the page.
 	/// @return Status code of page manip.
-	EXTERN_C Int32 mm_map_page(VoidPtr virt_addr, UInt32 flags);
+	EXTERN_C Int32 mm_map_page(VoidPtr virtual_address, VoidPtr physical_address, UInt32 flags);
 
 	EXTERN_C UInt8	rt_in8(UInt16 port);
 	EXTERN_C UInt16 rt_in16(UInt16 port);
 	EXTERN_C UInt32 rt_in32(UInt16 port);
 
-	EXTERN_C void rt_out16(UShort port, UShort byte);
-	EXTERN_C void rt_out8(UShort port, UChar byte);
-	EXTERN_C void rt_out32(UShort port, UInt byte);
+	EXTERN_C Void rt_out16(UShort port, UShort byte);
+	EXTERN_C Void rt_out8(UShort port, UChar byte);
+	EXTERN_C Void rt_out32(UShort port, UInt byte);
 
-	EXTERN_C void rt_wait_400ns();
-	EXTERN_C void rt_halt();
-	EXTERN_C void rt_cli();
-	EXTERN_C void rt_sti();
-	EXTERN_C void rt_cld();
-	EXTERN_C void rt_std();
+	EXTERN_C Void rt_wait_400ns();
+	EXTERN_C Void rt_halt();
+	EXTERN_C Void rt_cli();
+	EXTERN_C Void rt_sti();
+	EXTERN_C Void rt_cld();
+	EXTERN_C Void rt_std();
 } // namespace Kernel::HAL
 
 EXTERN_C Kernel::Void idt_handle_generic(Kernel::UIntPtr rsp);

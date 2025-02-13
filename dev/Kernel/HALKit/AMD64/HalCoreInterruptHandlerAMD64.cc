@@ -18,7 +18,9 @@ EXTERN_C void idt_handle_gpf(Kernel::UIntPtr rsp)
 	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
 
 	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
-		return;
+	{
+		while (YES);
+	}
 
 	kIsScheduling = NO;
 
