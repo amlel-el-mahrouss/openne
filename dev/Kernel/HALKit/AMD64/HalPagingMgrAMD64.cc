@@ -169,7 +169,7 @@ namespace Kernel::HAL
 		return 0;
 	}
 
-	UInt64 ihal_get_phys_address(VoidPtr virtual_address)
+	UInt64 hal_get_phys_address(VoidPtr virtual_address)
 	{
 		UInt64 addr = (UInt64)virtual_address;
 		UInt64 cr3	= (UInt64)hal_read_cr3();

@@ -223,7 +223,7 @@ namespace Kernel::HAL
 	}
 
 	/// @internal
-	UInt64 ihal_get_phys_address(VoidPtr virtual_address);
+	UInt64 hal_get_phys_address(VoidPtr virtual_address);
 
 	/// @brief Set Model-specific register.
 	/// @param msr MSR
