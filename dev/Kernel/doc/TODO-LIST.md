@@ -20,6 +20,6 @@ Status:
 
 BootZ: Need to boot from EPM partition. [ X ]
 <br>
-neoskrnl: New Filesystem is done. [ X ]
+openne: New Filesystem is done. [ X ]
 
 **Refer to Jira please!**

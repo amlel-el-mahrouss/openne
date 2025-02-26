@@ -6,7 +6,7 @@
 -Idev/Boot/BootKit
 -std=c++20
 -D__OPENNE_AMD64__
--D__NEOSKRNL__
+-D__OPENNE__
 -D__FSKIT_INCLUDES_NEFS__
 -D__OPENNE_ED__
 -xc++

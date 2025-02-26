@@ -11,9 +11,9 @@ BEGIN
       VALUE "CompanyName", "Amlal El Mahrouss."
 	  VALUE "FileDescription", "NeKernel MicroKernel."
       VALUE "FileVersion", KERNEL_VERSION
-	  VALUE "InternalName", "neoskrnl"
+	  VALUE "InternalName", "openne"
       VALUE "LegalCopyright", "(c) 2024 Amlal El Mahrouss, all rights reserved."
-      VALUE "OriginalFilename", "neoskrnl.exe"
+      VALUE "OriginalFilename", "openne.exe"
       VALUE "ProductName", "NeKernel."
       VALUE "ProductVersion", KERNEL_VERSION
     END

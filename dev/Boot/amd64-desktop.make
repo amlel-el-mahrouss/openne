@@ -42,12 +42,12 @@ REM=rm
 REM_FLAG=-f
 
 FLAG_ASM=-f win64
-FLAG_GNU=-fshort-wchar -D__EFI_x86_64__ -mno-red-zone -D__NEOSKRNL__ -D__ZBAOSLDR__ \
+FLAG_GNU=-fshort-wchar -D__EFI_x86_64__ -mno-red-zone -D__OPENNE__ -D__ZBAOSLDR__ \
 			-DEFI_FUNCTION_WRAPPER -I./ -I../Kernel -I../ -c -nostdlib -fno-rtti -fno-exceptions \
                         -std=c++20 -DBOOTZ_GPT_SUPPORT -DBOOTZ_EPM_SUPPORT -D__HAVE_OPENNE_APIS__ -DZBA_USE_FB -D__OPENNE_AMD64__ -D__OPENNE__ -DOPENNE_AUTO_FORMAT
 
 BOOTLOADER=zbaosldr.exe
-KERNEL=neoskrnl.exe
+KERNEL=openne.exe
 SYSCHK=syschk.sys
 STARTUP=startup.sys
 SCIKIT=libSCI.dylib
@@ -98,7 +98,7 @@ efi:
 	$(HTTP_GET) https://retrage.github.io/edk2-nightly/bin/DEBUGX64_OVMF.fd -O OVMF.fd
 
 BINS=*.bin
-EXECUTABLES=zbaosldr.exe neoskrnl.exe OVMF.fd
+EXECUTABLES=zbaosldr.exe openne.exe OVMF.fd
 
 TARGETS=$(REM_FLAG) $(OBJ) $(BIN) $(IMG) $(IMG_2) $(EXECUTABLES)
 

@@ -14,7 +14,7 @@
     "-Wl,--subsystem=17,--image-base,0x10000000,-e,ModuleMain"
   ],
   "cpp_macros": [
-    "__NEOSKRNL__",
+    "__OPENNE__",
     "__ZBAOSLDR__",
     "__BOOTLDR_STANDALONE__",
     "__OPENNE_AMD64__",

@@ -46,10 +46,10 @@ REM_FLAG=-f
 FLAG_ASM=-f win64
 FLAG_GNU=-fshort-wchar -c -ffreestanding -MMD -mno-red-zone -D__OPENNE_ARM64__ -fno-rtti -fno-exceptions -I./ \
 			 -target aarch64-unknown-windows \
-				-std=c++20 -DBOOTZ_EPM_SUPPORT -DkExpectedWidth=320 -DkExpectedHeight=480 -D__FSKIT_USE_NEFS__ -D__BOOTLDR_STANDALONE__ -D__NEOSKRNL__ -D__ZBAOSLDR__ -D__HAVE_OPENNE_APIS__ -D__OPENNE__ -I../ -I../Kernel
+				-std=c++20 -DBOOTZ_EPM_SUPPORT -DkExpectedWidth=320 -DkExpectedHeight=480 -D__FSKIT_USE_NEFS__ -D__BOOTLDR_STANDALONE__ -D__OPENNE__ -D__ZBAOSLDR__ -D__HAVE_OPENNE_APIS__ -D__OPENNE__ -I../ -I../Kernel
 
 BOOT_LOADER=zbaosldr.exe
-KERNEL=neoskrnl.exe
+KERNEL=openne.exe
 SYSCHK=syschk.sys
 STARTUP=startup.sys
 
@@ -95,7 +95,7 @@ efi:
 	$(HTTP_GET) https://retrage.github.io/edk2-nightly/bin/DEBUGAARCH64_QEMU_EFI.fd -O OVMF.fd
 
 BINS=*.bin
-EXECUTABLES=zbaosldr.exe neoskrnl.exe OVMF.fd
+EXECUTABLES=zbaosldr.exe openne.exe OVMF.fd
 
 TARGETS=$(REM_FLAG) $(OBJ) $(BIN) $(IMG) $(IMG_2) $(EXECUTABLES)
 
