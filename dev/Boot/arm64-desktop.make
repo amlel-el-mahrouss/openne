@@ -19,7 +19,7 @@ EMU=qemu-system-aarch64
 endif
 
 ifeq ($(NEWS_MODEL), )
-OPENNE_MODEL=-DkMachineModel="\"ZKA\""
+OPENNE_MODEL=-DkMachineModel="\"OpenNE\""
 endif
 
 BIOS=OVMF.fd

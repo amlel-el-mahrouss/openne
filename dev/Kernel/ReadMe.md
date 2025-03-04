@@ -1,3 +1,3 @@
-# ZkaOS Minimal Kernel DLL.
+# OneOS Minimal Kernel DLL.
 
 An EXE which takes the role of the Minimal Kernel Image.

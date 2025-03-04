@@ -83,7 +83,7 @@ ATAInit_Retry:
 	if (statRdy & ATA_SR_ERR)
 	{
 		writer.Write(
-			L"BootZ: ATA: Not an IDE based drive.\r");
+			L"OpenBootZ: ATA: Not an IDE based drive.\r");
 
 		return false;
 	}

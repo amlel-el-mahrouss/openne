@@ -217,7 +217,7 @@ EFI_EXTERN_C EFI_API Int32 Main(EfiHandlePtr	image_handle,
 	if (reader_syschk.Blob())
 	{
 		syschk_thread = new Boot::BootThread(reader_syschk.Blob());
-		syschk_thread->SetName("BootZ: System Recovery Check");
+		syschk_thread->SetName("OpenBootZ: System Recovery Check");
 	}
 
 	Boot::BDiskFormatFactory<BootDeviceATA> partition_factory;
@@ -281,7 +281,7 @@ EFI_EXTERN_C EFI_API Int32 Main(EfiHandlePtr	image_handle,
 	if (reader_kernel.Blob())
 	{
 		kernel_thread = new Boot::BootThread(reader_kernel.Blob());
-		kernel_thread->SetName("BootZ: MicroKernel.");
+		kernel_thread->SetName("OpenBootZ: MicroKernel.");
 
 		handover_hdr->f_KernelImage = reader_kernel.Blob();
 	}

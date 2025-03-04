@@ -86,7 +86,7 @@ enum
 	kEPMGenericOS = 0xcf, // Generic OS
 	kEPMLinux	  = 0x8f, // Linux on EPM
 	kEPMBSD		  = 0x9f, // Berkeley Soft. Distribution
-	kEPMZkaOS	  = 0x1f, // This OS.
+	kEPMOneOS	  = 0x1f, // This OS.
 	kEPMInvalidOS = 0xff,
 };
 

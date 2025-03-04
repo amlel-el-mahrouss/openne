@@ -12,7 +12,7 @@
 #include <KernelKit/MSDOS.h>
 #include <KernelKit/PE.h>
 
-#define kZKASubsystem 17
+#define kOpenNESubsystem 17
 
 #ifdef __OPENBOOTZ__
 // forward decl.

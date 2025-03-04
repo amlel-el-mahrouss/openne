@@ -51,40 +51,40 @@ namespace Boot
 			if (header_ptr->mMachine != kPeMachineAMD64 ||
 				header_ptr->mSignature != kPeSignature)
 			{
-				writer.Write("BootZ: Not a PE32+ executable.\r");
+				writer.Write("OpenBootZ: Not a PE32+ executable.\r");
 				return;
 			}
 #elif defined(__OPENNE_ARM64__)
 			if (header_ptr->mMachine != kPeMachineARM64 ||
 				header_ptr->mSignature != kPeSignature)
 			{
-				writer.Write("BootZ: Not a PE32+ executable.\r");
+				writer.Write("OpenBootZ: Not a PE32+ executable.\r");
 				return;
 			}
 #endif // __OPENNE_AMD64__ || __OPENNE_ARM64__
 
-			if (opt_header_ptr->mSubsystem != kZKASubsystem)
+			if (opt_header_ptr->mSubsystem != kOpenNESubsystem)
 			{
-				writer.Write("BootZ: Not a ZKA Subsystem executable.\r");
+				writer.Write("OpenBootZ: Not a OpenNE Subsystem executable.\r");
 				return;
 			}
 
-			writer.Write("BootZ: PE32+ executable detected (ZKA Subsystem).\r");
+			writer.Write("OpenBootZ: PE32+ executable detected (OpenNE Subsystem).\r");
 
 			auto numSecs = header_ptr->mNumberOfSections;
 
-			writer.Write("BootZ: Major Linker Ver: ").Write(opt_header_ptr->mMajorLinkerVersion).Write("\r");
-			writer.Write("BootZ: Minor Linker Ver: ").Write(opt_header_ptr->mMinorLinkerVersion).Write("\r");
-			writer.Write("BootZ: Major Subsystem Ver: ").Write(opt_header_ptr->mMajorSubsystemVersion).Write("\r");
-			writer.Write("BootZ: Minor Subsystem Ver: ").Write(opt_header_ptr->mMinorSubsystemVersion).Write("\r");
-			writer.Write("BootZ: Magic: ").Write(header_ptr->mSignature).Write("\r");
+			writer.Write("OpenBootZ: Major Linker Ver: ").Write(opt_header_ptr->mMajorLinkerVersion).Write("\r");
+			writer.Write("OpenBootZ: Minor Linker Ver: ").Write(opt_header_ptr->mMinorLinkerVersion).Write("\r");
+			writer.Write("OpenBootZ: Major Subsystem Ver: ").Write(opt_header_ptr->mMajorSubsystemVersion).Write("\r");
+			writer.Write("OpenBootZ: Minor Subsystem Ver: ").Write(opt_header_ptr->mMinorSubsystemVersion).Write("\r");
+			writer.Write("OpenBootZ: Magic: ").Write(header_ptr->mSignature).Write("\r");
 
 			constexpr auto cPageSize = 512;
 
 			EfiPhysicalAddress loadStartAddress = opt_header_ptr->mImageBase;
 			loadStartAddress += opt_header_ptr->mBaseOfData;
 
-			writer.Write("BootZ: Image base: ").Write(loadStartAddress).Write("\r");
+			writer.Write("OpenBootZ: Image base: ").Write(loadStartAddress).Write("\r");
 
 			auto numPages = opt_header_ptr->mSizeOfImage / cPageSize;
 			BS->AllocatePages(AllocateAddress, EfiLoaderData, numPages, &loadStartAddress);
@@ -104,7 +104,7 @@ namespace Boot
 				if (StrCmp(sectionForCode, sect->mName) == 0)
 				{
 					fStartAddress = (VoidPtr)((UIntPtr)loadStartAddress + opt_header_ptr->mAddressOfEntryPoint);
-					writer.Write("BootZ: Executable entry address: ").Write((UIntPtr)fStartAddress).Write("\r");
+					writer.Write("OpenBootZ: Executable entry address: ").Write((UIntPtr)fStartAddress).Write("\r");
 				}
 				else if (StrCmp(sectionForNewLdr, sect->mName) == 0)
 				{
@@ -122,7 +122,7 @@ namespace Boot
 #ifdef __OPENNE_AMD64__
 						if (handover_struc->HandoverArch != HEL::kArchAMD64)
 						{
-							fb_render_string("BootZ: Not an handover header, bad CPU...", 40, 10, RGB(0xFF, 0xFF, 0xFF));
+							fb_render_string("OpenBootZ: Not an handover header, bad CPU...", 40, 10, RGB(0xFF, 0xFF, 0xFF));
 							::EFI::Stop();
 						}
 #endif
@@ -130,17 +130,17 @@ namespace Boot
 #ifdef __OPENNE_ARM64__
 						if (handover_struc->HandoverArch != HEL::kArchARM64)
 						{
-							fb_render_string("BootZ: Not an handover header, bad CPU...", 40, 10, RGB(0xFF, 0xFF, 0xFF));
+							fb_render_string("OpenBootZ: Not an handover header, bad CPU...", 40, 10, RGB(0xFF, 0xFF, 0xFF));
 							::EFI::Stop();
 						}
 #endif
-						fb_render_string("BootZ: Not an handover header...", 40, 10, RGB(0xFF, 0xFF, 0xFF));
+						fb_render_string("OpenBootZ: Not an handover header...", 40, 10, RGB(0xFF, 0xFF, 0xFF));
 
 						::EFI::Stop();
 					}
 				}
 
-				writer.Write("BootZ: Raw offset: ").Write(sect->mPointerToRawData).Write(" of ").Write(sect->mName).Write("\r");
+				writer.Write("OpenBootZ: Raw offset: ").Write(sect->mPointerToRawData).Write(" of ").Write(sect->mName).Write("\r");
 
 				CopyMem((VoidPtr)(loadStartAddress + sect->mVirtualAddress), (VoidPtr)((UIntPtr)fBlob + sect->mPointerToRawData), sect->mSizeOfRawData);
 			}
@@ -155,12 +155,12 @@ namespace Boot
 			//  =========================================  //
 
 			fStartAddress = nullptr;
-			writer.Write("BootZ: PEF executable detected, won't load it.\r");
-			writer.Write("BootZ: note: PEF executables aren't loadable by default.\r");
+			writer.Write("OpenBootZ: PEF executable detected, won't load it.\r");
+			writer.Write("OpenBootZ: note: PEF executables aren't loadable by default.\r");
 		}
 		else
 		{
-			writer.Write("BootZ: Invalid Executable.\r");
+			writer.Write("OpenBootZ: Invalid Executable.\r");
 		}
 
 		fStack = new UInt8[mib_cast(16)];
@@ -170,7 +170,7 @@ namespace Boot
 	Int32 BootThread::Start(HEL::BootInfoHeader* handover, Bool own_stack)
 	{
 		HEL::HandoverProc err_fn = [](HEL::BootInfoHeader* rcx) -> Int32 {
-			fb_render_string("BootZ: Invalid Boot Image...", 50, 10, RGB(0xFF, 0xFF, 0xFF));
+			fb_render_string("OpenBootZ: Invalid Boot Image...", 50, 10, RGB(0xFF, 0xFF, 0xFF));
 			::EFI::Stop();
 
 			return NO;

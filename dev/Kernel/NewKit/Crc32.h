@@ -1,7 +1,7 @@
 /*
  *	========================================================
  *
- *  ZKA
+ *  OpenNE
  *  Date Added: 13/02/2023
  * 	Copyright (C) 2024-2025, Amlal EL Mahrouss, all rights reserved.
  *

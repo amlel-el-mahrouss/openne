@@ -20,7 +20,7 @@
 
 // Makes the compiler shut up.
 #ifndef kMachineModel
-#define kMachineModel "ZkaOS"
+#define kMachineModel "OneOS"
 #endif // !kMachineModel
 
 #ifndef kExpectedWidth
@@ -207,7 +207,7 @@ EFI_EXTERN_C EFI_API Int32 Main(EfiHandlePtr	image_handle,
 	if (reader_kernel.Blob())
 	{
 		auto kernel_thread = Boot::BootThread(reader_kernel.Blob());
-		kernel_thread.SetName("BootZ: MicroKernel.");
+		kernel_thread.SetName("OpenBootZ: MicroKernel.");
 
 		handover_hdr->f_KernelImage = reader_kernel.Blob();
 

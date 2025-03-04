@@ -18,7 +18,7 @@
 
 Status:
 
-BootZ: Need to boot from EPM partition. [ X ]
+OpenBootZ: Need to boot from EPM partition. [ X ]
 <br>
 openne: New Filesystem is done. [ X ]
 

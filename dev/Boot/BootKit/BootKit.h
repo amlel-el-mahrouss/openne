@@ -261,7 +261,7 @@ namespace Boot
 				return false;
 			}
 
-			writer.Write(L"BootZ: Partition: ").Write(blockPart->PartitionName).Write(L" is healthy.\r");
+			writer.Write(L"OpenBootZ: Partition: ").Write(blockPart->PartitionName).Write(L" is healthy.\r");
 
 			return true;
 		}
@@ -299,7 +299,7 @@ namespace Boot
 
 			fDiskDev.Write((Char*)&catalogKind, sizeof(ONEFS_CATALOG_STRUCT));
 
-			writer.Write(L"BootZ: Wrote directory: ").Write(blob->fFileName).Write(L"\r");
+			writer.Write(L"OpenBootZ: Wrote directory: ").Write(blob->fFileName).Write(L"\r");
 
 			return true;
 		}
@@ -378,7 +378,7 @@ namespace Boot
 		epm_boot.LbaStart  = kNeFSRootCatalogStartAddress;
 		epm_boot.LbaEnd	   = fDiskDev.GetDiskSize();
 		epm_boot.SectorSz  = part.SectorSize;
-		epm_boot.Kind	   = kEPMZkaOS;
+		epm_boot.Kind	   = kEPMOneOS;
 		epm_boot.NumBlocks = part.CatalogCount;
 
 		CopyMem(epm_boot.Name, reinterpret_cast<VoidPtr>(const_cast<Char*>(kBlockName)), StrLen(kBlockName));
@@ -389,7 +389,7 @@ namespace Boot
 
 		fDiskDev.Write((Char*)&epm_boot, sizeof(BOOT_BLOCK_STRUCT));
 
-		writer.Write(L"BootZ: Drive has been formatted Successfully.\r");
+		writer.Write(L"OpenBootZ: Drive has been formatted Successfully.\r");
 #endif
 
 		return YES;

@@ -21,7 +21,7 @@ EMU=qemu-system-x86_64  -net none
 endif
 
 ifeq ($(NEWS_MODEL), )
-OPENNE_MODEL=-DkMachineModel="\"ZkaOS\""
+OPENNE_MODEL=-DkMachineModel="\"OneOS\""
 endif
 
 BIOS=OVMF.fd

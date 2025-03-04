@@ -56,13 +56,13 @@ Boot::BFileReader::BFileReader(const CharacterTypeUTF16* path,
 
 	if (BS->HandleProtocol(ImageHandle, &guidImg, (void**)&img) != kEfiOk)
 	{
-		mWriter.Write(L"BootZ: Handle-Protocol: No-Such-Protocol").Write(L"\r");
+		mWriter.Write(L"OpenBootZ: Handle-Protocol: No-Such-Protocol").Write(L"\r");
 		this->mErrorCode = kNotSupported;
 	}
 
 	if (BS->HandleProtocol(img->DeviceHandle, &guidEfp, (void**)&efp) != kEfiOk)
 	{
-		mWriter.Write(L"BootZ: Handle-Protocol: No-Such-Protocol").Write(L"\r");
+		mWriter.Write(L"OpenBootZ: Handle-Protocol: No-Such-Protocol").Write(L"\r");
 		this->mErrorCode = kNotSupported;
 		return;
 	}
@@ -71,7 +71,7 @@ Boot::BFileReader::BFileReader(const CharacterTypeUTF16* path,
 
 	if (efp->OpenVolume(efp, &mRootFs) != kEfiOk)
 	{
-		mWriter.Write(L"BootZ: Fetch-Protocol: No-Such-Volume").Write(L"\r");
+		mWriter.Write(L"OpenBootZ: Fetch-Protocol: No-Such-Volume").Write(L"\r");
 		this->mErrorCode = kNotSupported;
 		return;
 	}
@@ -81,12 +81,12 @@ Boot::BFileReader::BFileReader(const CharacterTypeUTF16* path,
 	if (mRootFs->Open(mRootFs, &fileFs, mPath, kEFIFileRead, kEFIReadOnly) !=
 		kEfiOk)
 	{
-		mWriter.Write(L"BootZ: Fetch-Protocol: No-Such-Path: ")
+		mWriter.Write(L"OpenBootZ: Fetch-Protocol: No-Such-Path: ")
 			.Write(mPath)
 			.Write(L"\r");
 		this->mErrorCode = kNotSupported;
 
-		fb_render_string("BootZ: PLEASE RECOVER YOUR MINKRNL INSTALL.", 40, 10, RGB(0xFF, 0xFF, 0xFF));
+		fb_render_string("OpenBootZ: PLEASE RECOVER YOUR MINKRNL INSTALL.", 40, 10, RGB(0xFF, 0xFF, 0xFF));
 
 		mRootFs->Close(mRootFs);
 
@@ -137,7 +137,7 @@ Void Boot::BFileReader::ReadAll(SizeT readUntil, SizeT chunkToRead, UIntPtr out_
 	if (mFile->GetInfo(mFile, &kFileInfoGUID, &szInfo, &newPtrInfo) == kEfiOk)
 	{
 		readUntil = newPtrInfo.FileSize;
-		mWriter.Write(L"BootZ: File size: ").Write(readUntil).Write("\r");
+		mWriter.Write(L"OpenBootZ: File size: ").Write(readUntil).Write("\r");
 	}
 
 	if (readUntil == 0)
