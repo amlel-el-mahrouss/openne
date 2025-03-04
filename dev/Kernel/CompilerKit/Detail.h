@@ -6,9 +6,9 @@
 
 #pragma once
 
-#ifdef __NEOSKRNL__
+#ifdef __OPENNE__
 #include <NewKit/Defines.h>
-#endif // ifdef __NEOSKRNL__
+#endif // ifdef __OPENNE__
 
 #define OPENNE_COPY_DELETE(KLASS)            \
 	KLASS& operator=(const KLASS&) = delete; \

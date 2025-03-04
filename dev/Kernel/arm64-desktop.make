@@ -7,7 +7,7 @@ CC			= clang++
 LD			= lld-link
 CCFLAGS		= -fshort-wchar -c -ffreestanding -MMD -mno-red-zone -D__OPENNE_ARM64__ -fno-rtti -fno-exceptions -I./ \
 			 -target aarch64-unknown-windows \
-				-std=c++20 -O3 -D__NEOSKRNL__ -D__OPENNE_MINIMAL_OS__ -D__OPENNE_NO_BUILTIN__ -D__HAVE_OPENNE_APIS__ -D__OPENNE__ -I../
+				-std=c++20 -O3 -D__OPENNE__ -D__OPENNE_MINIMAL_OS__ -D__OPENNE_NO_BUILTIN__ -D__HAVE_OPENNE_APIS__ -D__OPENNE__ -I../
 
 ASM 		= clang++
 
@@ -23,7 +23,7 @@ LDFLAGS		= -subsystem:efi_application -entry:hal_init_platform /nodefaultlib
 LDOBJ		= obj/*.obj
 
 # This file is the Kernel, responsible of task management and memory.
-KERNEL		= neoskrnl.exe
+KERNEL		= openne.exe
 
 .PHONY: error
 error:

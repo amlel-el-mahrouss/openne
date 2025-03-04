@@ -1,11 +1,11 @@
 ##################################################
 # (c) Amlal EL Mahrouss, all rights reserved.
-# This is the neoskrnl's makefile.
+# This is the openne's makefile.
 ##################################################
 
 CXX			= x86_64-w64-mingw32-g++
 LD			= x86_64-w64-mingw32-ld
-CCFLAGS		= -fshort-wchar -c -D__OPENNE_AMD64__ -mno-red-zone -fno-rtti -fno-exceptions -std=c++20 -D__OPENNE_SUPPORT_NX__ -O0 -I../Vendor -D__FSKIT_INCLUDES_NEFS__ -D__NEOSKRNL__ -D__HAVE_OPENNE_APIS__ -D__FREESTANDING__ -D__OPENNE_VIRTUAL_MEMORY_SUPPORT__ -D__OPENNE_AUTO_FORMAT__ -D__OPENNE__ -I./ -I../ -I../zba
+CCFLAGS		= -fshort-wchar -c -D__OPENNE_AMD64__ -mno-red-zone -fno-rtti -fno-exceptions -std=c++20 -D__OPENNE_SUPPORT_NX__ -O0 -I../Vendor -D__FSKIT_INCLUDES_NEFS__ -D__OPENNE__ -D__HAVE_OPENNE_APIS__ -D__FREESTANDING__ -D__OPENNE_VIRTUAL_MEMORY_SUPPORT__ -D__OPENNE_AUTO_FORMAT__ -D__OPENNE__ -I./ -I../ -I../zba
 
 ASM 		= nasm
 
@@ -37,7 +37,7 @@ LDFLAGS		= -e hal_init_platform --subsystem=17 --image-base 0x4000000
 LDOBJ		= obj/*.obj
 
 # This file is the Kernel, responsible of task, memory, driver, sci, disk and device management.
-KERNEL_IMG		= neoskrnl.exe
+KERNEL_IMG		= openne.exe
 
 .PHONY: error
 error:
