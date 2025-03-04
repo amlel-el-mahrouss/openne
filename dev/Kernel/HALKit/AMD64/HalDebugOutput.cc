@@ -84,7 +84,7 @@ namespace Kernel
 
 		static int x = kFontSizeX, y = kFontSizeY;
 
-		static BOOL important = NO;
+		static BOOL important = YES;
 
 		while (index < len)
 		{

@@ -15,7 +15,7 @@
   ],
   "cpp_macros": [
     "__NEOSKRNL__",
-    "__ZBAOSLDR__",
+    "__OPENBOOTZ__",
     "__OPENNE_AMD64__",
     "kNetBootVersionHighest=0x0100",
     "kNetBootVersionLowest=0x0100",

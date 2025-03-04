@@ -27,28 +27,28 @@ default.
 	@author Amlal EL Mahrouss (Amlal EL Mahrouss, amlalelmahrouss at icloud dot com)
 */
 
-#define kNeFSInvalidFork	(-1)
-#define kNeFSInvalidCatalog (-1)
-#define kNeFSNodeNameLen	(256)
+#define kNeFSInvalidFork	(~0)
+#define kNeFSInvalidCatalog (~0)
+#define kNeFSCatalogNameLen	(4096)
 
 #define kNeFSMinimumDiskSize (gib_cast(4))
 
 #define kNeFSSectorSz (512)
 
 #define kNeFSIdentLen (8)
-#define kNeFSIdent	  "   OFS"
+#define kNeFSIdent	  " ONeFS"
 #define kNeFSPadLen	  (392)
 
 #define kNeFSMetaFilePrefix '$'
 
-#define kNeFSVersionInteger (0x0100)
-#define kNeFSVerionString	"1.0.0"
+#define kNeFSVersionInteger (0x0101)
+#define kNeFSVerionString	"1.0.1"
 
 /// @brief Standard fork types.
 #define kNeFSDataFork	  "main_data"
 #define kNeFSResourceFork "main_rsrc"
 
-#define kNeFSForkSize (sizeof(NFS_FORK_STRUCT))
+#define kNeFSForkSize (sizeof(ONEFS_FORK_STRUCT))
 
 #define kNeFSPartitionTypeStandard (7)
 #define kNeFSPartitionTypePage	   (8)
@@ -92,7 +92,7 @@ default.
 
 /// @note Start after the partition map header. (Virtual addressing)
 #define kNeFSRootCatalogStartAddress (1024)
-#define kNeFSCatalogStartAddress	 ((2048) + sizeof(NFS_SUPER_BLOCK))
+#define kNeFSCatalogStartAddress	 ((2048) + sizeof(ONEFS_SUPER_BLOCK))
 
 #define kResourceTypeDialog (10)
 #define kResourceTypeString (11)
@@ -115,9 +115,9 @@ default.
 #define kNeFSApplicationExt ".app"
 #define kNeFSJournalExt		".jrnl"
 
-struct NFS_CATALOG_STRUCT;
-struct NFS_FORK_STRUCT;
-struct NFS_SUPER_BLOCK;
+struct ONEFS_CATALOG_STRUCT;
+struct ONEFS_FORK_STRUCT;
+struct ONEFS_SUPER_BLOCK;
 
 enum
 {
@@ -140,9 +140,9 @@ enum
 };
 
 /// @brief Catalog type.
-struct PACKED NFS_CATALOG_STRUCT final
+struct PACKED ONEFS_CATALOG_STRUCT final
 {
-	Kernel::Char Name[kNeFSNodeNameLen] = {0};
+	Kernel::Char Name[kNeFSCatalogNameLen] = {0};
 	Kernel::Char Mime[kNeFSMimeNameLen] = {0};
 
 	/// Catalog flags.
@@ -175,10 +175,10 @@ struct PACKED NFS_CATALOG_STRUCT final
 /// @note The way we store is way different than how other filesystems do, specific chunk of code are
 /// written into either the data fork or resource fork, the resource fork is reserved for file metadata.
 /// whereas the data fork is reserved for file data.
-struct PACKED NFS_FORK_STRUCT final
+struct PACKED ONEFS_FORK_STRUCT final
 {
 	Kernel::Char ForkName[kNeFSForkNameLen]	   = {0};
-	Kernel::Char CatalogName[kNeFSNodeNameLen] = {0};
+	Kernel::Char CatalogName[kNeFSCatalogNameLen] = {0};
 
 	Kernel::Int32 Flags;
 	Kernel::Int32 Kind;
@@ -197,7 +197,7 @@ struct PACKED NFS_FORK_STRUCT final
 };
 
 /// @brief Partition superblock type
-struct PACKED NFS_SUPER_BLOCK final
+struct PACKED ONEFS_SUPER_BLOCK final
 {
 	Kernel::Char Ident[kNeFSIdentLen]	 = {0};
 	Kernel::Char PartitionName[kPartLen] = {0};
@@ -265,29 +265,29 @@ namespace Kernel
 		/// @param catalog it's catalog
 		/// @param theFork the fork itself.
 		/// @return the fork
-		_Output BOOL CreateFork(_Input NFS_FORK_STRUCT& in);
+		_Output BOOL CreateFork(_Input ONEFS_FORK_STRUCT& in);
 
 		/// @brief Find fork inside New filesystem.
 		/// @param catalog the catalog.
 		/// @param name the fork name.
 		/// @return the fork.
-		_Output NFS_FORK_STRUCT* FindFork(_Input NFS_CATALOG_STRUCT* catalog,
+		_Output ONEFS_FORK_STRUCT* FindFork(_Input ONEFS_CATALOG_STRUCT* catalog,
 										  _Input const Char* name,
 										  Boolean			 data);
 
-		_Output Void RemoveFork(_Input NFS_FORK_STRUCT* fork);
+		_Output Void RemoveFork(_Input ONEFS_FORK_STRUCT* fork);
 
-		_Output Void CloseFork(_Input NFS_FORK_STRUCT* fork);
+		_Output Void CloseFork(_Input ONEFS_FORK_STRUCT* fork);
 
-		_Output NFS_CATALOG_STRUCT* FindCatalog(_Input const Char* catalog_name, Lba& ou_lba, Bool search_hidden = YES, Bool local_search = NO);
+		_Output ONEFS_CATALOG_STRUCT* FindCatalog(_Input const Char* catalog_name, Lba& ou_lba, Bool search_hidden = YES, Bool local_search = NO);
 
-		_Output NFS_CATALOG_STRUCT* GetCatalog(_Input const Char* name);
+		_Output ONEFS_CATALOG_STRUCT* GetCatalog(_Input const Char* name);
 
-		_Output NFS_CATALOG_STRUCT* CreateCatalog(_Input const Char* name,
+		_Output ONEFS_CATALOG_STRUCT* CreateCatalog(_Input const Char* name,
 												  _Input const Int32& flags,
 												  _Input const Int32& kind);
 
-		_Output NFS_CATALOG_STRUCT* CreateCatalog(_Input const Char* name);
+		_Output ONEFS_CATALOG_STRUCT* CreateCatalog(_Input const Char* name);
 
 		_Output Bool WriteCatalog(_Input const Char* catalog,
 								  _Input Bool		 rsrc,
@@ -295,18 +295,18 @@ namespace Kernel
 								  _Input SizeT		 sz,
 								  _Input const Char* name);
 
-		_Output VoidPtr ReadCatalog(_Input _Output NFS_CATALOG_STRUCT* catalog,
+		_Output VoidPtr ReadCatalog(_Input _Output ONEFS_CATALOG_STRUCT* catalog,
 									_Input Bool						   isRsrcFork,
 									_Input SizeT					   dataSz,
 									_Input const Char* forkName);
 
-		_Output Bool Seek(_Input _Output NFS_CATALOG_STRUCT* catalog, SizeT off);
+		_Output Bool Seek(_Input _Output ONEFS_CATALOG_STRUCT* catalog, SizeT off);
 
-		_Output SizeT Tell(_Input _Output NFS_CATALOG_STRUCT* catalog);
+		_Output SizeT Tell(_Input _Output ONEFS_CATALOG_STRUCT* catalog);
 
 		_Output Bool RemoveCatalog(_Input const Char* catalog);
 
-		_Output Bool CloseCatalog(_InOut NFS_CATALOG_STRUCT* catalog);
+		_Output Bool CloseCatalog(_InOut ONEFS_CATALOG_STRUCT* catalog);
 
 		/// @brief Make a EPM+NeFS drive out of the disk.
 		/// @param drive The drive to write on.
@@ -335,7 +335,7 @@ namespace Kernel
 	class NeFileSystemJournal final
 	{
 	private:
-		NFS_CATALOG_STRUCT* mNode{nullptr};
+		ONEFS_CATALOG_STRUCT* mNode{nullptr};
 
 	public:
 		explicit NeFileSystemJournal(const char* stamp = nullptr)
@@ -404,7 +404,7 @@ namespace Kernel
 				!mNode)
 				return NO;
 
-			NFS_FORK_STRUCT new_fork{};
+			ONEFS_FORK_STRUCT new_fork{};
 
 			rt_copy_memory(mStamp, new_fork.CatalogName, rt_string_len(mStamp));
 			rt_copy_memory(journal_name, new_fork.ForkName, rt_string_len(journal_name));
@@ -426,7 +426,7 @@ namespace Kernel
 		}
 
 	private:
-		Char mStamp[kNeFSNodeNameLen] = {"/etc/xml/journal" kNeFSJournalExt};
+		Char mStamp[kNeFSCatalogNameLen] = {"/etc/xml/journal" kNeFSJournalExt};
 	};
 
 	namespace NeFS

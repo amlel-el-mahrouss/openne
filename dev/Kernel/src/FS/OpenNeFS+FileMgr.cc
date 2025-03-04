@@ -168,8 +168,8 @@ namespace Kernel
 
 		OPENNE_UNUSED(flags);
 
-		if ((reinterpret_cast<NFS_CATALOG_STRUCT*>(node))->Kind == kNeFSCatalogKindFile)
-			mParser->WriteCatalog(reinterpret_cast<NFS_CATALOG_STRUCT*>(node)->Name, (flags & kFileFlagRsrc ? true : false), data, size,
+		if ((reinterpret_cast<ONEFS_CATALOG_STRUCT*>(node))->Kind == kNeFSCatalogKindFile)
+			mParser->WriteCatalog(reinterpret_cast<ONEFS_CATALOG_STRUCT*>(node)->Name, (flags & kFileFlagRsrc ? true : false), data, size,
 								  name);
 	}
 
@@ -186,8 +186,8 @@ namespace Kernel
 
 		OPENNE_UNUSED(flags);
 
-		if ((reinterpret_cast<NFS_CATALOG_STRUCT*>(node))->Kind == kNeFSCatalogKindFile)
-			return mParser->ReadCatalog(reinterpret_cast<NFS_CATALOG_STRUCT*>(node), (flags & kFileFlagRsrc ? true : false), sz,
+		if ((reinterpret_cast<ONEFS_CATALOG_STRUCT*>(node))->Kind == kNeFSCatalogKindFile)
+			return mParser->ReadCatalog(reinterpret_cast<ONEFS_CATALOG_STRUCT*>(node), (flags & kFileFlagRsrc ? true : false), sz,
 										name);
 
 		return nullptr;
@@ -204,7 +204,7 @@ namespace Kernel
 		if (!node || off == 0)
 			return false;
 
-		return mParser->Seek(reinterpret_cast<NFS_CATALOG_STRUCT*>(node), off);
+		return mParser->Seek(reinterpret_cast<ONEFS_CATALOG_STRUCT*>(node), off);
 	}
 
 	/// @brief Tell where the catalog is.
@@ -217,7 +217,7 @@ namespace Kernel
 		if (!node)
 			return kNPos;
 
-		return mParser->Tell(reinterpret_cast<NFS_CATALOG_STRUCT*>(node));
+		return mParser->Tell(reinterpret_cast<ONEFS_CATALOG_STRUCT*>(node));
 	}
 
 	/// @brief Rewinds the catalog.

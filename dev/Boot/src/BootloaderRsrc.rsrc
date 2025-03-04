@@ -11,10 +11,10 @@ BEGIN
       VALUE "CompanyName", "Amlal EL Mahrouss"
       VALUE "FileDescription", "ZKA OS Loader."
       VALUE "FileVersion", BOOTLOADER_VERSION
-      VALUE "InternalName", "zbaosldr"
+      VALUE "InternalName", "openbootz"
       VALUE "LegalCopyright", "Copyright (C) 2024-2025, Amlal EL Mahrouss all rights reserved."
-      VALUE "OriginalFilename", "zbaosldr.exe"
-      VALUE "ProductName", "zbaosldr"
+      VALUE "OriginalFilename", "openbootz.exe"
+      VALUE "ProductName", "openbootz"
       VALUE "ProductVersion", BOOTLOADER_VERSION
     END
   END

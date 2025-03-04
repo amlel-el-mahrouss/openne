@@ -248,12 +248,12 @@ namespace Kernel
 	{
 		ProcessID rtl_create_process(PEFLoader& exec, const Int32& process_kind) noexcept
 		{
-			auto errOrStart = exec.FindStart();
+			auto err_or = exec.FindStart();
 
-			if (errOrStart.Error() != kErrorSuccess)
+			if (err_or.Error() != kErrorSuccess)
 				return kProcessInvalidID;
 
-			auto id = UserProcessScheduler::The().Spawn(reinterpret_cast<const Char*>(exec.FindSymbol(kPefNameSymbol, kPefData)), errOrStart.Leak().Leak(), exec.GetBlob().Leak().Leak());
+			auto id = UserProcessScheduler::The().Spawn(reinterpret_cast<const Char*>(exec.FindSymbol(kPefNameSymbol, kPefData)), err_or.Leak().Leak(), exec.GetBlob().Leak().Leak());
 
 			if (id != kProcessInvalidID)
 			{

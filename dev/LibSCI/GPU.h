@@ -23,22 +23,10 @@ struct GPUCmdBuffer;
 /// ------------------------------------------------------------------------------------------ //
 struct GPUCmdBuffer final
 {
-	SizeT	X, Y, Z;
 	VoidPtr FrameData;
 	SizeT	FrameDataSz;
-	SizeT	BackBufferLayer;
+	SizeT	FrameLayer;
 	Bool	IsGPGPUData;
-	Bool	BackBufferFirst;
-
-	Bool isGPGPUData()
-	{
-		return !this->BackBufferFirst && this->IsGPGPUData;
-	}
-
-	Bool isValid()
-	{
-		return this->FrameData && this->FrameDataSz > 0;
-	}
 };
 
 typedef VoidPtr GPUObject;

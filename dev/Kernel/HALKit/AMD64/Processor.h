@@ -222,9 +222,6 @@ namespace Kernel::HAL
 					 : "c"(msr));
 	}
 
-	/// @internal
-	UInt64 hal_get_phys_address(VoidPtr virtual_address);
-
 	/// @brief Set Model-specific register.
 	/// @param msr MSR
 	/// @param lo low byte
@@ -235,6 +232,9 @@ namespace Kernel::HAL
 					 :
 					 : "a"(lo), "d"(hi), "c"(msr));
 	}
+
+	/// @internal
+	UInt64 hal_get_phys_address(VoidPtr virtual_address);
 
 	/// @brief Processor specific namespace.
 	namespace Detail

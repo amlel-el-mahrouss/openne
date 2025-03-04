@@ -38,6 +38,7 @@ namespace Kernel
 
 		auto addr =
 			(volatile UIntPtr*)(reinterpret_cast<UIntPtr>(fAddress) + offset);
+			
 		*addr = bit;
 
 		return true;

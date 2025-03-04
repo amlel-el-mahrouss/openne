@@ -45,24 +45,26 @@
 #define kSATASubClass	(0x06)
 #define kSATABar5		(0x24)
 
-STATIC Kernel::PCI::Device kDevice;
+using namespace Kernel;
+
+STATIC PCI::Device kDevice;
 STATIC HbaMem* kSATA					   = nullptr;
-STATIC Kernel::SizeT kSATAPortIdx		   = 0UL;
-STATIC Kernel::Lba kCurrentDiskSectorCount = 0UL;
-STATIC Kernel::Char kCurrentDiskModel[50]  = {"UNKNOWN SATA DRIVE"};
+STATIC SizeT kSATAPortIdx		   = 0UL;
+STATIC Lba kCurrentDiskSectorCount = 0UL;
+STATIC Char kCurrentDiskModel[50]  = {"UNKNOWN SATA DRIVE"};
 
 template <BOOL Write, BOOL CommandOrCTRL, BOOL Identify>
-static Kernel::Void drvi_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buffer, Kernel::SizeT sector_sz, Kernel::SizeT size_buffer) noexcept;
+static Void drvi_std_input_output(UInt64 lba, UInt8* buffer, SizeT sector_sz, SizeT size_buffer) noexcept;
 
-static Kernel::Int32 drvi_find_cmd_slot(HbaPort* port) noexcept;
+static Int32 drvi_find_cmd_slot(HbaPort* port) noexcept;
 
-static Kernel::Void drvi_calculate_disk_geometry() noexcept;
+static Void drvi_calculate_disk_geometry() noexcept;
 
-static Kernel::Void drvi_calculate_disk_geometry() noexcept
+static Void drvi_calculate_disk_geometry() noexcept
 {
 	kCurrentDiskSectorCount = 0UL;
 
-	Kernel::UInt8 identify_data[512] = {};
+	UInt8 identify_data[512] = {};
 
 	drvi_std_input_output<NO, NO, YES>(0, identify_data, 0, 512);
 
@@ -78,14 +80,14 @@ static Kernel::Void drvi_calculate_disk_geometry() noexcept
 
 	kout << "Drive Model: " << kCurrentDiskModel << endl;
 
-	kout << "Disk Size: " << Kernel::number(drv_get_size()) << endl;
-	kout << "Highest Disk LBA: " << Kernel::number(kCurrentDiskSectorCount) << endl;
+	kout << "Disk Size: " << number(drv_get_size()) << endl;
+	kout << "Highest Disk LBA: " << number(kCurrentDiskSectorCount) << endl;
 }
 
 /// @brief Initializes an AHCI disk.
-/// @param PortsImplemented the amount of kSATA that have been detected.
+/// @param pi the amount of kSATA that have been detected.
 /// @return if the disk was successfully initialized or not.
-Kernel::Boolean drv_std_init(Kernel::UInt16& PortsImplemented)
+Boolean drv_std_init(UInt16& pi)
 {
 	using namespace Kernel;
 
@@ -106,20 +108,20 @@ Kernel::Boolean drv_std_init(Kernel::UInt16& PortsImplemented)
 
 			kout << hex_number((UIntPtr)mem_ahci) << endl;
 
-			Kernel::UInt32 ports_implemented = mem_ahci->Pi;
-			Kernel::UInt16 ahci_index		 = 0;
+			UInt32 ports_implemented = mem_ahci->Pi;
+			UInt16 ahci_index		 = 0;
 
-			const Kernel::UInt16 kMaxPortsImplemented = kSATAPortCnt;
-			const Kernel::UInt32 kSATASignature		  = 0x00000101;
-			const Kernel::UInt8	 kSATAPresent		  = 0x03;
-			const Kernel::UInt8	 kSATAIPMActive		  = 0x01;
+			const UInt16 kMaxPortsImplemented = kSATAPortCnt;
+			const UInt32 kSATASignature		  = 0x00000101;
+			const UInt8	 kSATAPresent		  = 0x03;
+			const UInt8	 kSATAIPMActive		  = 0x01;
 
 			while (ahci_index < kMaxPortsImplemented)
 			{
 				if (ports_implemented)
 				{
-					Kernel::UInt8 ipm = (mem_ahci->Ports[ahci_index].Ssts >> 8) & 0x0F;
-					Kernel::UInt8 det = mem_ahci->Ports[ahci_index].Ssts & 0x0F;
+					UInt8 ipm = (mem_ahci->Ports[ahci_index].Ssts >> 8) & 0x0F;
+					UInt8 det = mem_ahci->Ports[ahci_index].Ssts & 0x0F;
 
 					HAL::mm_map_page(mem_ahci, mem_ahci, HAL::kMMFlagsWr);
 
@@ -163,26 +165,26 @@ Kernel::Boolean drv_std_init(Kernel::UInt16& PortsImplemented)
 	return No;
 }
 
-Kernel::Boolean drv_std_detected(Kernel::Void)
+Boolean drv_std_detected(Void)
 {
 	return kDevice.DeviceId() != 0xFFFF && kCurrentDiskSectorCount > 0;
 }
 
-Kernel::Void drv_std_write(Kernel::UInt64 lba, Kernel::Char* buffer, Kernel::SizeT sector_sz, Kernel::SizeT size_buffer)
+Void drv_std_write(UInt64 lba, Char* buffer, SizeT sector_sz, SizeT size_buffer)
 {
-	drvi_std_input_output<YES, YES, NO>(lba, (Kernel::UInt8*)buffer, sector_sz, size_buffer);
+	drvi_std_input_output<YES, YES, NO>(lba, (UInt8*)buffer, sector_sz, size_buffer);
 }
 
-Kernel::Void drv_std_read(Kernel::UInt64 lba, Kernel::Char* buffer, Kernel::SizeT sector_sz, Kernel::SizeT size_buffer)
+Void drv_std_read(UInt64 lba, Char* buffer, SizeT sector_sz, SizeT size_buffer)
 {
-	drvi_std_input_output<NO, YES, NO>(lba, (Kernel::UInt8*)buffer, sector_sz, size_buffer);
+	drvi_std_input_output<NO, YES, NO>(lba, (UInt8*)buffer, sector_sz, size_buffer);
 }
 
-static Kernel::Int32 drvi_find_cmd_slot(HbaPort* port) noexcept
+static Int32 drvi_find_cmd_slot(HbaPort* port) noexcept
 {
-	Kernel::UInt32 slots = port->Ci;
+	UInt32 slots = port->Ci;
 
-	for (Kernel::Int32 i = 0; i < kSATAPortCnt; i++)
+	for (Int32 i = 0; i < kSATAPortCnt; i++)
 	{
 		if ((slots & i) == 0)
 			return i;
@@ -194,42 +196,42 @@ static Kernel::Int32 drvi_find_cmd_slot(HbaPort* port) noexcept
 }
 
 template <BOOL Write, BOOL CommandOrCTRL, BOOL Identify>
-static Kernel::Void drvi_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buffer, Kernel::SizeT sector_sz, Kernel::SizeT size_buffer) noexcept
+static Void drvi_std_input_output(UInt64 lba, UInt8* buffer, SizeT sector_sz, SizeT size_buffer) noexcept
 {
-	const Kernel::SizeT slot = drvi_find_cmd_slot(&kSATA->Ports[kSATAPortIdx]);
+	const SizeT slot = drvi_find_cmd_slot(&kSATA->Ports[kSATAPortIdx]);
 
 	if (slot == -1)
 		return;
 
 	if (size_buffer > mib_cast(4))
-		Kernel::ke_panic(RUNTIME_CHECK_FAILED, "AHCI only supports < 4mb DMA transfers per PRD.");
+		ke_panic(RUNTIME_CHECK_FAILED, "AHCI only supports < 4mb DMA transfers per PRD.");
 
 	if (!Write)
-		Kernel::rt_set_memory(buffer, 0, size_buffer);
+		rt_set_memory(buffer, 0, size_buffer);
 
-	HbaCmdHeader* command_header = ((HbaCmdHeader*)((Kernel::UInt64)(kSATA->Ports[kSATAPortIdx].Clb)));
+	HbaCmdHeader* command_header = ((HbaCmdHeader*)((UInt64)(kSATA->Ports[kSATAPortIdx].Clb)));
 
 	MUST_TRY(command_header != nullptr);
 
-	command_header->Cfl			 = sizeof(FisRegH2D) / sizeof(Kernel::UInt32);
+	command_header->Cfl			 = sizeof(FisRegH2D) / sizeof(UInt32);
 	command_header->Write		 = Write;
 	command_header->Prdtl		 = 1;
 	command_header->Atapi		 = 0;
 	command_header->Prefetchable = 1;
 
-	HbaCmdTbl* command_table = ((HbaCmdTbl*)((Kernel::UInt64)(command_header->Ctba)));
+	HbaCmdTbl* command_table = ((HbaCmdTbl*)((UInt64)(command_header->Ctba)));
 
-	Kernel::rt_set_memory(command_table, 0, sizeof(HbaCmdTbl));
+	rt_set_memory(command_table, 0, sizeof(HbaCmdTbl));
 
 	MUST_PASS(command_table);
 
-	auto phys_dma_buf = Kernel::HAL::hal_get_phys_address((Kernel::VoidPtr)buffer);
+	auto phys_dma_buf = HAL::hal_get_phys_address((VoidPtr)buffer);
 
-	command_table->Prdt[0].Dba	= ((Kernel::UInt32)(Kernel::UInt64)phys_dma_buf & 0xFFFFFFFF);
-	command_table->Prdt[0].Dbau = (((Kernel::UInt64)phys_dma_buf << 32));
+	command_table->Prdt[0].Dba	= ((UInt32)(UInt64)phys_dma_buf & 0xFFFFFFFF);
+	command_table->Prdt[0].Dbau = (((UInt64)phys_dma_buf << 32));
 	command_table->Prdt[0].Dbc	= ((size_buffer)-1) | (1 << 31);
 
-	FisRegH2D* h2d_fis = (FisRegH2D*)((Kernel::UInt64)&command_table->Cfis);
+	FisRegH2D* h2d_fis = (FisRegH2D*)((UInt64)&command_table->Cfis);
 
 	h2d_fis->FisType   = kFISTypeRegH2D;
 	h2d_fis->CmdOrCtrl = CommandOrCTRL;
@@ -253,7 +255,7 @@ static Kernel::Void drvi_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buf
 	h2d_fis->CountHigh = (sector_sz >> 8) & 0xFF;
 
 	if (kSATA->Is & kHBAErrTaskFile)
-		Kernel::ke_panic(RUNTIME_CHECK_BAD_BEHAVIOR, "AHCI Read disk failure, faulty component.");
+		ke_panic(RUNTIME_CHECK_BAD_BEHAVIOR, "AHCI Read disk failure, faulty component.");
 
 	while (kSATA->Ports[kSATAPortIdx].Cmd & (kHBAPxCmdCR | kHBAPxCmdFR))
 		; // Ensure controller is idle
@@ -266,11 +268,11 @@ static Kernel::Void drvi_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buf
 		if (kSATA->Ports[kSATAPortIdx].Ci == 0)
 			break;
 
-		kout << "PxCI: " << Kernel::hex_number(kSATA->Ports[kSATAPortIdx].Ci) << endl;
-		kout << "PxCMD: " << Kernel::hex_number(kSATA->Ports[kSATAPortIdx].Cmd) << endl;
+		kout << "PxCI: " << hex_number(kSATA->Ports[kSATAPortIdx].Ci) << endl;
+		kout << "PxCMD: " << hex_number(kSATA->Ports[kSATAPortIdx].Cmd) << endl;
 
 		if (kSATA->Is & kHBAErrTaskFile)
-			Kernel::ke_panic(RUNTIME_CHECK_BAD_BEHAVIOR, "AHCI Read disk failure, faulty component.");
+			ke_panic(RUNTIME_CHECK_BAD_BEHAVIOR, "AHCI Read disk failure, faulty component.");
 	}
 }
 
@@ -278,14 +280,14 @@ static Kernel::Void drvi_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buf
 	 @brief Gets the number of sectors inside the drive.
 	 @return Sector size in bytes.
   */
-Kernel::SizeT drv_get_sector_count()
+SizeT drv_get_sector_count()
 {
 	return kCurrentDiskSectorCount;
 }
 
 /// @brief Get the drive size.
 /// @return Disk size in bytes.
-Kernel::SizeT drv_get_size()
+SizeT drv_get_size()
 {
 	return (drv_get_sector_count()) * kAHCISectorSize;
 }
