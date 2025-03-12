@@ -135,7 +135,7 @@ namespace Kernel
 			ProcessMemoryHeapList* entry	  = this->ProcessMemoryHeap;
 			ProcessMemoryHeapList* prev_entry = nullptr;
 
-			while (!entry)
+			while (entry)
 			{
 				if (entry->MemoryEntry == nullptr)
 					break; // chose to break here, when we get an already allocated memory entry for our needs.
@@ -227,8 +227,6 @@ namespace Kernel
 			auto next = memory_heap_list->MemoryNext;
 
 			mm_delete_heap(memory_heap_list);
-
-			memory_heap_list = nullptr;
 			memory_heap_list = next;
 		}
 
