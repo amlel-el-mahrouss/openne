@@ -190,6 +190,7 @@ _Output ONEFS_FORK_STRUCT* NeFileSystemParser::FindFork(_Input ONEFS_CATALOG_STR
 			case 2:
 				err_global_get() = kErrorDiskIsFull;
 				break;
+			case 3:
 				err_global_get() = kErrorNoSuchDisk;
 				break;
 
