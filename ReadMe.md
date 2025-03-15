@@ -7,9 +7,6 @@
 OpenNE is a **modular microkernel and bootloader** written in **C++20**, designed for **performance, portability, and scalability**.  
 Inspired by NT Kernel and microkernel architectures, it features **APIC-based multiprocessing, a custom filesystem (OpenNeFS), and EFI-based booting**.  
 
-The PCI subsystem and SATA system is undergoing big refactors as of right now.
-Both of those needs big fixes.
-
 We welcome contributions and improvements—feel free to submit PRs or issues!
 
 ## Screenshots:
