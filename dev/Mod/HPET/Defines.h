@@ -14,29 +14,29 @@
 #include <NewKit/Defines.h>
 #include <Mod/ACPI/ACPI.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	struct PACKED HPETAddressStructure final
 	{
-		Kernel::UInt8  AddressSpaceId; // 0 - system memory, 1 - system I/O
-		Kernel::UInt8  RegisterBitWidth;
-		Kernel::UInt8  RegisterBitOffset;
-		Kernel::UInt8  Reserved;
-		Kernel::UInt64 Address;
+		OpenNE::UInt8  AddressSpaceId; // 0 - system memory, 1 - system I/O
+		OpenNE::UInt8  RegisterBitWidth;
+		OpenNE::UInt8  RegisterBitOffset;
+		OpenNE::UInt8  Reserved;
+		OpenNE::UInt64 Address;
 	};
 
 	struct PACKED HPETHeader final : public SDT
 	{
-		Kernel::UInt8		 HardwareRevId;
-		Kernel::UInt8		 ComparatorCount : 5;
-		Kernel::UInt8		 CounterSize : 1;
-		Kernel::UInt8		 Reserved : 1;
-		Kernel::UInt8		 LegacyReplacement : 1;
-		Kernel::UInt16		 PciVendorId;
+		OpenNE::UInt8		 HardwareRevId;
+		OpenNE::UInt8		 ComparatorCount : 5;
+		OpenNE::UInt8		 CounterSize : 1;
+		OpenNE::UInt8		 Reserved : 1;
+		OpenNE::UInt8		 LegacyReplacement : 1;
+		OpenNE::UInt16		 PciVendorId;
 		HPETAddressStructure Address;
-		Kernel::UInt8		 HpetNumber;
-		Kernel::UInt16		 MinimumTick;
-		Kernel::UInt8		 PageProtection;
+		OpenNE::UInt8		 HpetNumber;
+		OpenNE::UInt16		 MinimumTick;
+		OpenNE::UInt8		 PageProtection;
 	};
 
-} // namespace Kernel
+} // namespace OpenNE

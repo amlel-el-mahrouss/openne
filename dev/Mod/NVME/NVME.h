@@ -17,9 +17,9 @@
 /// @file NVME.h
 /// @brief NVME driver.
 
-#define OPENNE_ALIGN_NVME ATTRIBUTE(aligned(sizeof(Kernel::UInt32)))
+#define OPENNE_ALIGN_NVME ATTRIBUTE(aligned(sizeof(OpenNE::UInt32)))
 
-namespace Kernel
+namespace OpenNE
 {
 	struct OPENNE_ALIGN_NVME HAL_NVME_BAR_0 final
 	{
@@ -108,6 +108,6 @@ namespace Kernel
 
 		return true;
 	}
-} // namespace Kernel
+} // namespace OpenNE
 
 #endif // ifndef __MODULE_NVME_H__

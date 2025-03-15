@@ -13,7 +13,7 @@
 
 #define kCPUBackendName "ARMv8"
 
-namespace Kernel::HAL
+namespace OpenNE::HAL
 {
 	struct PACKED Register64 final
 	{
@@ -76,11 +76,11 @@ namespace Kernel::HAL
 	{
 		return *reinterpret_cast<volatile DataKind*>(address);
 	}
-} // namespace Kernel::HAL
+} // namespace OpenNE::HAL
 
-inline Kernel::VoidPtr kKernelBitMpStart = nullptr;
-inline Kernel::UIntPtr kKernelBitMpSize	 = 0UL;
+inline OpenNE::VoidPtr kKernelBitMpStart = nullptr;
+inline OpenNE::UIntPtr kKernelBitMpSize	 = 0UL;
 
-inline Kernel::VoidPtr kKernelPhysicalStart = nullptr;
+inline OpenNE::VoidPtr kKernelPhysicalStart = nullptr;
 
 #include <HALKit/ARM64/Paging.h>

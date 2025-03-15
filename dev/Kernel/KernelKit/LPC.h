@@ -11,15 +11,15 @@
 /// @file LPC.h
 /// @brief Local Process Codes.
 
-#define err_local_ok()	 (Kernel::UserProcessScheduler::The().CurrentProcess().Leak().GetLocalCode() == Kernel::kErrorSuccess)
-#define err_local_fail() (Kernel::UserProcessScheduler::The().CurrentProcess().Leak().GetLocalCode() != Kernel::kErrorSuccess)
-#define err_local_get()	 (Kernel::UserProcessScheduler::The().CurrentProcess().Leak().GetLocalCode())
+#define err_local_ok()	 (OpenNE::UserProcessScheduler::The().CurrentProcess().Leak().GetLocalCode() == OpenNE::kErrorSuccess)
+#define err_local_fail() (OpenNE::UserProcessScheduler::The().CurrentProcess().Leak().GetLocalCode() != OpenNE::kErrorSuccess)
+#define err_local_get()	 (OpenNE::UserProcessScheduler::The().CurrentProcess().Leak().GetLocalCode())
 
-#define err_global_ok()	  (Kernel::kErrorLocalNumber == Kernel::kErrorSuccess)
-#define err_global_fail() (Kernel::kErrorLocalNumber != Kernel::kErrorSuccess)
-#define err_global_get()  (Kernel::kErrorLocalNumber)
+#define err_global_ok()	  (OpenNE::kErrorLocalNumber == OpenNE::kErrorSuccess)
+#define err_global_fail() (OpenNE::kErrorLocalNumber != OpenNE::kErrorSuccess)
+#define err_global_get()  (OpenNE::kErrorLocalNumber)
 
-namespace Kernel
+namespace OpenNE
 {
 	typedef Int32 HError;
 
@@ -67,4 +67,4 @@ namespace Kernel
 	/// @param void no params are needed.
 	/// @return if error-free: false, otherwise true.
 	Boolean err_bug_check(Void) noexcept;
-} // namespace Kernel
+} // namespace OpenNE

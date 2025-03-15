@@ -13,7 +13,7 @@
 
 #include <NewKit/Defines.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	class PACKED SDT
 	{
@@ -83,6 +83,6 @@ namespace Kernel
 		UInt32 CreatorRevision;
 		UInt32 AddressArr[];
 	};
-} // namespace Kernel
+} // namespace OpenNE
 
 #endif // !__ACPI__

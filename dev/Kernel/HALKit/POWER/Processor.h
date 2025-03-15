@@ -14,7 +14,7 @@
 #define NoOp()			 asm volatile("mr 0, 0")
 #define kHalPPCAlignment __attribute__((aligned(4)))
 
-namespace Kernel::HAL
+namespace OpenNE::HAL
 {
 	typedef UIntPtr Reg;
 
@@ -47,16 +47,16 @@ namespace Kernel::HAL
 	{
 		NoOp(); // no oop
 	}
-} // namespace Kernel::HAL
+} // namespace OpenNE::HAL
 
-EXTERN_C Kernel::Void int_handle_math(Kernel::UIntPtr sp);
-EXTERN_C Kernel::Void int_handle_pf(Kernel::UIntPtr sp);
+EXTERN_C OpenNE::Void int_handle_math(OpenNE::UIntPtr sp);
+EXTERN_C OpenNE::Void int_handle_pf(OpenNE::UIntPtr sp);
 
 /// @brief Set TLB.
-Kernel::Bool hal_set_tlb(Kernel::UInt8 tlb, Kernel::UInt32 epn, Kernel::UInt64 rpn, Kernel::UInt8 perms, Kernel::UInt8 wimge, Kernel::UInt8 ts, Kernel::UInt8 esel, Kernel::UInt8 tsize, Kernel::UInt8 iprot);
+OpenNE::Bool hal_set_tlb(OpenNE::UInt8 tlb, OpenNE::UInt32 epn, OpenNE::UInt64 rpn, OpenNE::UInt8 perms, OpenNE::UInt8 wimge, OpenNE::UInt8 ts, OpenNE::UInt8 esel, OpenNE::UInt8 tsize, OpenNE::UInt8 iprot);
 
 /// @brief Write TLB.
-Kernel::Void hal_write_tlb(Kernel::UInt32 mas0, Kernel::UInt32 mas1, Kernel::UInt32 mas2, Kernel::UInt32 mas3, Kernel::UInt32 mas7);
+OpenNE::Void hal_write_tlb(OpenNE::UInt32 mas0, OpenNE::UInt32 mas1, OpenNE::UInt32 mas2, OpenNE::UInt32 mas3, OpenNE::UInt32 mas7);
 
 /// @brief Flush TLB.
-EXTERN_C Kernel::Void hal_flush_tlb();
+EXTERN_C OpenNE::Void hal_flush_tlb();

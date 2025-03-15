@@ -7,7 +7,7 @@
 
 #include <NewKit/Defines.h>
 
-namespace Kernel::PCI
+namespace OpenNE::PCI
 {
 	enum class PciConfigKind : UShort
 	{
@@ -75,7 +75,7 @@ namespace Kernel::PCI
 		UShort fFunction;
 		UInt32 fBar;
 	};
-} // namespace Kernel::PCI
+} // namespace OpenNE::PCI
 
-EXTERN_C void NewOSPCISetCfgTarget(Kernel::UInt bar);
-EXTERN_C Kernel::UInt NewOSPCIReadRaw(Kernel::UInt bar);
+EXTERN_C void NewOSPCISetCfgTarget(OpenNE::UInt bar);
+EXTERN_C OpenNE::UInt NewOSPCIReadRaw(OpenNE::UInt bar);

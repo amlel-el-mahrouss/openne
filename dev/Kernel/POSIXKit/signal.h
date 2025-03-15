@@ -10,7 +10,7 @@
 
 #include <POSIXKit/unix_layer.h>
 
-typedef Kernel::UInt32 signal_t;
+typedef OpenNE::UInt32 signal_t;
 
 #define SIGKILL 0
 #define SIGPAUS 1

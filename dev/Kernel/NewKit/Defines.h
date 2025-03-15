@@ -20,7 +20,7 @@
 #endif
 
 /// @brief The **Kernel** namespace where it's API resides.
-namespace Kernel
+namespace OpenNE
 {
 	using voidPtr = void*;
 	using VoidPtr = void*;
@@ -185,4 +185,4 @@ namespace Kernel
 			return NO;
 		}
 	};
-} // namespace Kernel
+} // namespace OpenNE

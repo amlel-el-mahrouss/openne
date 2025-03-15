@@ -8,7 +8,7 @@
 #include <KernelKit/LPC.h>
 #include <KernelKit/UserProcessScheduler.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	/// @internal
 	/// @brief The internal sanitize function.
@@ -99,4 +99,4 @@ namespace Kernel
 
 		return No;
 	}
-} // namespace Kernel
+} // namespace OpenNE

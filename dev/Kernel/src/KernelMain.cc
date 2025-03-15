@@ -25,20 +25,21 @@
 #include <KernelKit/Timer.h>
 
 #ifdef __OPENNE_AUTO_FORMAT__
-namespace Kernel::Detail
+namespace OpenNE::Detail
 {
 	/// @brief Filesystem auto formatter, additional checks are also done by the class.
 	class NeFilesystemInstaller final
 	{
 	private:
-		Kernel::NeFileSystemParser* mNeFS{nullptr};
-		Kernel::NeFileSystemJournal mJournal;
+		OpenNE::NeFileSystemParser* mNeFS{nullptr};
 
 	public:
 		/// @brief wizard constructor.
 		explicit NeFilesystemInstaller()
 		{
-			mNeFS = new Kernel::NeFileSystemParser();
+			OpenNE::NeFileSystemJournal journal;
+
+			mNeFS = new OpenNE::NeFileSystemParser();
 
 			if (mNeFS)
 			{
@@ -47,9 +48,9 @@ namespace Kernel::Detail
 					"/", "/boot/", "/sys/", "/media/", "/etc/",
 					"/usr/", "/lib/", "/mnt/", "/sbin/", "/n/", "/dev/", "/run/", "/root/"};
 
-				for (Kernel::SizeT dir_index = 0UL; dir_index < kFolderCount; ++dir_index)
+				for (OpenNE::SizeT dir_index = 0UL; dir_index < kFolderCount; ++dir_index)
 				{
-					auto catalog_folder = mNeFS->GetCatalog(kFolderStr[dir_index]);
+					ONEFS_CATALOG_STRUCT* catalog_folder = mNeFS->GetCatalog(kFolderStr[dir_index]);
 
 					if (catalog_folder)
 					{
@@ -69,11 +70,11 @@ namespace Kernel::Detail
 					catalog_folder = nullptr;
 				}
 
-				if (!mJournal.GetJournal(mNeFS))
-					mJournal.CreateJournal(mNeFS);
+				if (!journal.GetJournal(mNeFS))
+					journal.CreateJournal(mNeFS);
 
-				mJournal.CommitJournal(mNeFS, "<LOG_XML><FS>NeFS</FS></LOG_XML>", "NeFS Format System");
-				mJournal.ReleaseJournal();
+				journal.CommitJournal(mNeFS, "<LOG_XML><FS>NeFS</FS></LOG_XML>", "NeFS Format System");
+				journal.ReleaseJournal();
 			}
 		}
 
@@ -87,16 +88,13 @@ namespace Kernel::Detail
 
 		OPENNE_COPY_DEFAULT(NeFilesystemInstaller);
 	};
-} // namespace Kernel::Detail
+} // namespace OpenNE::Detail
 #endif // ifdef __OPENNE_AUTO_FORMAT__
 
 /// @brief Kernel entrypoint.
 /// @param Void
 /// @return Void
-EXTERN_C Kernel::Void rtl_kernel_main(Kernel::SizeT argc, char** argv, char** envp, Kernel::SizeT envp_len)
+EXTERN_C OpenNE::Void rtl_kernel_main(OpenNE::SizeT argc, char** argv, char** envp, OpenNE::SizeT envp_len)
 {
-#ifdef __OPENNE_AUTO_FORMAT__
-	Kernel::NeFS::fs_init_nefs();
-	Kernel::Detail::NeFilesystemInstaller installer{};
-#endif // __OPENNE_AUTO_FORMAT__
+	OpenNE::NeFS::fs_init_nefs();
 }

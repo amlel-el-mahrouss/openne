@@ -15,9 +15,9 @@
 
 #define kCrcCnt (256)
 
-namespace Kernel
+namespace OpenNE
 {
 	UInt ke_calculate_crc32(const Char* crc, UInt len) noexcept;
-} // namespace Kernel
+} // namespace OpenNE
 
 #endif // !CRC32_H

@@ -28,12 +28,12 @@ struct THREAD_INFORMATION_BLOCK;
 /// Located in GS on AMD64, other architectures have their own stuff. (64x0, 32x0, ARM64)
 struct PACKED THREAD_INFORMATION_BLOCK final
 {
-	Kernel::Char	Cookie[kTLSCookieLen]{0}; //! Thread magic number.
-	Kernel::VoidPtr Record{nullptr};		  //! Thread information record.
+	OpenNE::Char	Cookie[kTLSCookieLen]{0}; //! Thread magic number.
+	OpenNE::VoidPtr Record{nullptr};		  //! Thread information record.
 };
 
 ///! @brief Cookie Sanity check.
-Kernel::Boolean tls_check_tib(THREAD_INFORMATION_BLOCK* the_tib);
+OpenNE::Boolean tls_check_tib(THREAD_INFORMATION_BLOCK* the_tib);
 
 ///! @brief new ptr syscall.
 template <typename T>
@@ -41,26 +41,26 @@ T* tls_new_ptr(void) noexcept;
 
 ///! @brief delete ptr syscall.
 template <typename T>
-Kernel::Boolean tls_delete_ptr(T* ptr) noexcept;
+OpenNE::Boolean tls_delete_ptr(T* ptr) noexcept;
 
 //! @brief Delete process pointer.
 //! @param obj The pointer to delete.
 template <typename T>
-inline Kernel::Bool tls_delete_ptr(Kernel::ErrorOr<T> obj) noexcept;
+inline OpenNE::Bool tls_delete_ptr(OpenNE::ErrorOr<T> obj) noexcept;
 
 //! @brief Delete process pointer.
 //! @param obj The pointer to delete.
 template <typename T>
-inline Kernel::Bool tls_delete_ptr(Kernel::ErrorOr<T*> obj) noexcept;
+inline OpenNE::Bool tls_delete_ptr(OpenNE::ErrorOr<T*> obj) noexcept;
 
 template <typename T, typename... Args>
 T* tls_new_class(Args&&... args);
 
 /// @brief TLS install TIB and PIB. (syscall)
-EXTERN_C Kernel::Void rt_install_tib(THREAD_INFORMATION_BLOCK* TIB, THREAD_INFORMATION_BLOCK* PIB);
+EXTERN_C OpenNE::Void rt_install_tib(THREAD_INFORMATION_BLOCK* TIB, THREAD_INFORMATION_BLOCK* PIB);
 
 /// @brief TLS check (syscall)
-EXTERN_C Kernel::Bool tls_check_syscall_impl(Kernel::VoidPtr TIB) noexcept;
+EXTERN_C OpenNE::Bool tls_check_syscall_impl(OpenNE::VoidPtr TIB) noexcept;
 
 #include <KernelKit/ThreadLocalStorage.inl>
 

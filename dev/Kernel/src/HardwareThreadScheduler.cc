@@ -15,7 +15,7 @@
 ///! @brief Multi processing is needed for multi-tasking operations.
 /***********************************************************************************/
 
-namespace Kernel
+namespace OpenNE
 {
 	/***********************************************************************************/
 	/// @note Those symbols are needed in order to switch and validate the stack.
@@ -215,4 +215,4 @@ namespace Kernel
 	{
 		return fThreadList.Count();
 	}
-} // namespace Kernel
+} // namespace OpenNE

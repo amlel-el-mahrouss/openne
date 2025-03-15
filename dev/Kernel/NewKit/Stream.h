@@ -10,7 +10,7 @@
 #include <NewKit/Defines.h>
 #include <NewKit/Ref.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	template <typename StreamTrait, typename Kind>
 	class Stream final
@@ -55,4 +55,4 @@ namespace Kernel
 		Ref<StreamTrait> fStream;
 		Ref<Kind>		 fKind;
 	};
-} // namespace Kernel
+} // namespace OpenNE

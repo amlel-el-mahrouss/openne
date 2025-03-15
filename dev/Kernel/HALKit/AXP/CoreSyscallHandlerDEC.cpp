@@ -10,7 +10,7 @@
 /// @brief Internal call for syscall, to work with C++.
 /// @param stack
 /// @return nothing.
-EXTERN_C void rt_syscall_handle(Kernel::HAL::StackFrame* stack)
+EXTERN_C void rt_syscall_handle(OpenNE::HAL::StackFrame* stack)
 {
 	if (stack->Rcx <= (kSyscalls.Count() - 1))
 	{

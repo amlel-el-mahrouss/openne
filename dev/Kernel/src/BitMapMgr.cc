@@ -22,7 +22,7 @@
 #define kBitMapSizeIdx (1U)
 #define kBitMapUsedIdx (2U)
 
-namespace Kernel
+namespace OpenNE
 {
 	namespace HAL
 	{
@@ -184,4 +184,4 @@ namespace Kernel
 			return ret;
 		}
 	} // namespace HAL
-} // namespace Kernel
+} // namespace OpenNE

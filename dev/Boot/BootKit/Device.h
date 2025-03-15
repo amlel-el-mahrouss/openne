@@ -11,7 +11,7 @@
 
 #include <CompilerKit/CompilerKit.h>
 
-using namespace Kernel;
+using namespace OpenNE;
 
 /// @brief Device type.
 class Device

@@ -9,7 +9,7 @@
 
 #include <NewKit/Defines.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	Int			rt_copy_memory(const voidPtr src, voidPtr dst, Size len);
 	Int			rt_move_memory(const voidPtr src, voidPtr dst, Size len);
@@ -26,4 +26,4 @@ namespace Kernel
 	Int			rt_to_lower(Int c);
 	voidPtr		rt_string_in_string(const Char* in, const Char* needle);
 	char*		rt_string_has_char(Char* str, const Char chr);
-} // namespace Kernel
+} // namespace OpenNE

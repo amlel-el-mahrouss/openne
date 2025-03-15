@@ -10,7 +10,7 @@
 #define kDriveSectorSizeSSD		(512U)
 #define kDriveSectorSizeOptical (2048)
 
-namespace Kernel
+namespace OpenNE
 {
 	template <typename T>
 	class IDeviceObject;
@@ -19,4 +19,4 @@ namespace Kernel
 	class AHCIDeviceInterface;
 	class ATADeviceInterface;
 	class SCSIDeviceInterface;
-} // namespace Kernel
+} // namespace OpenNE

@@ -9,7 +9,7 @@
 
 #include <NewKit/Defines.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	void ke_runtime_check(bool expr, const Char* file, const Char* line);
 }
@@ -17,14 +17,14 @@ namespace Kernel
 #define MUST_PASS_COMPILER(EXPR, MSG) static_assert(EXPR, MSG)
 
 #define __MUST_PASS(EXPR, FILE, LINE) \
-	Kernel::ke_runtime_check(EXPR, FILE, STRINGIFY(LINE))
+	OpenNE::ke_runtime_check(EXPR, FILE, STRINGIFY(LINE))
 
 #ifdef __DEBUG__
 #define MUST_PASS(EXPR) __MUST_PASS((EXPR), __FILE__, __LINE__)
 #define assert(EXPR)	MUST_PASS(EXPR, RUNTIME_CHECK_EXPRESSION)
 #else
-#define MUST_PASS(EXPR) (Kernel::Void)(EXPR)
-#define assert(EXPR)	(Kernel::Void)(EXPR)
+#define MUST_PASS(EXPR) (OpenNE::Void)(EXPR)
+#define assert(EXPR)	(OpenNE::Void)(EXPR)
 #endif
 
 enum RUNTIME_CHECK
@@ -48,7 +48,7 @@ enum RUNTIME_CHECK
 	RUNTIME_CHECK_COUNT,
 };
 
-namespace Kernel
+namespace OpenNE
 {
 	void ke_panic(const Int32& id, const Char* message = nullptr);
-} // namespace Kernel
+} // namespace OpenNE

@@ -10,9 +10,9 @@
 #include <External/Defines.h>
 // #include <LibCompress/Exports.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	class ICompressProxy;
-} // namespace Kernel
+} // namespace OpenNE
 
 #endif // !ifndef COMPRESSKIT_RLE_H

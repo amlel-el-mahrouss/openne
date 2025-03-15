@@ -8,7 +8,7 @@
 
 #include <NewKit/Defines.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	class Pair;
-} // namespace Kernel
+} // namespace OpenNE

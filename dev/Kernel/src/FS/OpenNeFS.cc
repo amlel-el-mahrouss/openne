@@ -20,7 +20,7 @@
 #include <KernelKit/User.h>
 #include <KernelKit/DriveMgr.h>
 
-using namespace Kernel;
+using namespace OpenNE;
 
 #ifdef __OPENNE_NO_BUILTIN__
 /***********************************************************************************/
@@ -32,12 +32,12 @@ using namespace Kernel;
 /***********************************************************************************/
 /// @brief get sector count.
 /***********************************************************************************/
-Kernel::SizeT drv_get_sector_count();
+OpenNE::SizeT drv_get_sector_count();
 
 /***********************************************************************************/
 /// @brief get device size.
 /***********************************************************************************/
-Kernel::SizeT drv_get_size();
+OpenNE::SizeT drv_get_size();
 
 #endif
 
@@ -1025,7 +1025,7 @@ SizeT NeFileSystemParser::Tell(_Input _Output ONEFS_CATALOG_STRUCT* catalog)
 	return 0;
 }
 
-namespace Kernel::NeFS
+namespace OpenNE::NeFS
 {
 	/***********************************************************************************/
 	/// @brief Construct NeFS drives.
@@ -1040,6 +1040,6 @@ namespace Kernel::NeFS
 
 		return true;
 	}
-} // namespace Kernel::NeFS
+} // namespace OpenNE::NeFS
 
 #endif // ifdef __FSKIT_INCLUDES_NEFS__

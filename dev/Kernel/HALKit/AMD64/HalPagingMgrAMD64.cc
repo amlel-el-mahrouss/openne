@@ -10,7 +10,7 @@
 #include <HALKit/AMD64/Paging.h>
 #include <HALKit/AMD64/Processor.h>
 
-namespace Kernel::HAL
+namespace OpenNE::HAL
 {
 	typedef UInt32 PageTableIndex;
 
@@ -189,4 +189,4 @@ namespace Kernel::HAL
 		// Get Physical Address
 		return (pt[pt_idx] & ~0xFFF) + (addr & 0xFFF);
 	}
-} // namespace Kernel::HAL
+} // namespace OpenNE::HAL

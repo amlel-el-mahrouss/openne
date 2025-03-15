@@ -11,7 +11,7 @@
 #include <NewKit/Defines.h>
 #include <NewKit/Ref.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	template <SizeT Sz>
 	class IOArray final
@@ -50,7 +50,7 @@ namespace Kernel
 	};
 
 	using IOArray16 = IOArray<16>;
-} // namespace Kernel
+} // namespace OpenNE
 
 #ifdef __x86_64__
 #include <KernelKit/PCI/IO-Impl-AMD64.inl>

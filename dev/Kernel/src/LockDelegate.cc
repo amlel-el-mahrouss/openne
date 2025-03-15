@@ -6,7 +6,7 @@
 
 #include <KernelKit/LockDelegate.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	/// @note Leave it empty for now.
-} // namespace Kernel
+} // namespace OpenNE

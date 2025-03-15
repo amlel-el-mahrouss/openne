@@ -56,7 +56,7 @@ namespace Boot
 	typedef WideChar CharacterTypeUTF16;
 	typedef Char	 CharacterTypeUTF8;
 
-	using namespace Kernel;
+	using namespace OpenNE;
 
 	/**
 	 * @brief BootKit Text Writer class
@@ -89,17 +89,17 @@ namespace Boot
 		BTextWriter(const BTextWriter&)			   = default;
 	};
 
-	Kernel::SizeT BCopyMem(CharacterTypeUTF16* dest, CharacterTypeUTF16* src, const Kernel::SizeT len);
+	OpenNE::SizeT BCopyMem(CharacterTypeUTF16* dest, CharacterTypeUTF16* src, const OpenNE::SizeT len);
 
-	Kernel::SizeT BSetMem(CharacterTypeUTF8* src, const CharacterTypeUTF8 byte, const Kernel::SizeT len);
+	OpenNE::SizeT BSetMem(CharacterTypeUTF8* src, const CharacterTypeUTF8 byte, const OpenNE::SizeT len);
 
 	/// String length functions.
 
 	/// @brief get string length.
-	Kernel::SizeT BStrLen(const CharacterTypeUTF16* ptr);
+	OpenNE::SizeT BStrLen(const CharacterTypeUTF16* ptr);
 
 	/// @brief set memory with custom value.
-	Kernel::SizeT BSetMem(CharacterTypeUTF16* src, const CharacterTypeUTF16 byte, const Kernel::SizeT len);
+	OpenNE::SizeT BSetMem(CharacterTypeUTF16* src, const CharacterTypeUTF16 byte, const OpenNE::SizeT len);
 
 	/**
 	 * @brief BootKit File Reader class
@@ -359,12 +359,12 @@ namespace Boot
 
 		BTextWriter writer;
 
-		writer << "partition name: " << part.PartitionName << "\n";
-		writer << "start: " << part.StartCatalog << "\n";
-		writer << "number of catalogs: " << part.CatalogCount << "\n";
-		writer << "free catalog: " << part.FreeCatalog << "\n";
-		writer << "free sectors: " << part.FreeSectors << "\n";
-		writer << "sector size: " << part.SectorSize << "\n";
+		writer << "partition name: " << part.PartitionName << "\r";
+		writer << "start: " << part.StartCatalog << "\r";
+		writer << "number of catalogs: " << part.CatalogCount << "\r";
+		writer << "free catalog: " << part.FreeCatalog << "\r";
+		writer << "free sectors: " << part.FreeSectors << "\r";
+		writer << "sector size: " << part.SectorSize << "\r";
 
 #ifdef BOOTZ_EPM_SUPPORT
 		BOOT_BLOCK_STRUCT epm_boot{0};

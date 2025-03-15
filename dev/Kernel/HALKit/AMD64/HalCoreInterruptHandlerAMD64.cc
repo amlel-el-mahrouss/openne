@@ -13,11 +13,11 @@ STATIC BOOL kIsScheduling = NO;
 
 /// @brief Handle GPF fault.
 /// @param rsp
-EXTERN_C void idt_handle_gpf(Kernel::UIntPtr rsp)
+EXTERN_C void idt_handle_gpf(OpenNE::UIntPtr rsp)
 {
-	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
+	auto process = OpenNE::UserProcessScheduler::The().CurrentProcess();
 
-	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
+	if (process.Leak().Status != OpenNE::ProcessStatusKind::kRunning)
 	{
 		while (YES)
 			;
@@ -33,18 +33,18 @@ EXTERN_C void idt_handle_gpf(Kernel::UIntPtr rsp)
 
 	kout << "KTrace: SIGKILL.\r";
 
-	process.Leak().Status = Kernel::ProcessStatusKind::kKilled;
+	process.Leak().Status = OpenNE::ProcessStatusKind::kKilled;
 
 	process.Leak().Crash();
 }
 
 /// @brief Handle page fault.
 /// @param rsp
-EXTERN_C void idt_handle_pf(Kernel::UIntPtr rsp)
+EXTERN_C void idt_handle_pf(OpenNE::UIntPtr rsp)
 {
-	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
+	auto process = OpenNE::UserProcessScheduler::The().CurrentProcess();
 
-	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
+	if (process.Leak().Status != OpenNE::ProcessStatusKind::kRunning)
 		return;
 
 	kIsScheduling = NO;
@@ -57,15 +57,15 @@ EXTERN_C void idt_handle_pf(Kernel::UIntPtr rsp)
 
 	kout << "KTrace: SIGKILL.\r";
 
-	process.Leak().Status = Kernel::ProcessStatusKind::kKilled;
+	process.Leak().Status = OpenNE::ProcessStatusKind::kKilled;
 
 	process.Leak().Crash();
 }
 
 /// @brief Handle scheduler interrupt.
-EXTERN_C void idt_handle_scheduler(Kernel::UIntPtr rsp)
+EXTERN_C void idt_handle_scheduler(OpenNE::UIntPtr rsp)
 {
-	static Kernel::Int64 try_count_before_brute = 100000UL;
+	static OpenNE::Int64 try_count_before_brute = 100000UL;
 
 	while (kIsScheduling)
 	{
@@ -79,18 +79,18 @@ EXTERN_C void idt_handle_scheduler(Kernel::UIntPtr rsp)
 	kIsScheduling		   = YES;
 
 	kout << "KTrace: Timer IRQ (Scheduler Notification).\r";
-	Kernel::UserProcessHelper::StartScheduling();
+	OpenNE::UserProcessHelper::StartScheduling();
 
 	kIsScheduling = NO;
 }
 
 /// @brief Handle math fault.
 /// @param rsp
-EXTERN_C void idt_handle_math(Kernel::UIntPtr rsp)
+EXTERN_C void idt_handle_math(OpenNE::UIntPtr rsp)
 {
-	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
+	auto process = OpenNE::UserProcessScheduler::The().CurrentProcess();
 
-	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
+	if (process.Leak().Status != OpenNE::ProcessStatusKind::kRunning)
 		return;
 
 	kIsScheduling = NO;
@@ -103,18 +103,18 @@ EXTERN_C void idt_handle_math(Kernel::UIntPtr rsp)
 
 	kout << "KTrace: SIGKILL.\r";
 
-	process.Leak().Status = Kernel::ProcessStatusKind::kKilled;
+	process.Leak().Status = OpenNE::ProcessStatusKind::kKilled;
 
 	process.Leak().Crash();
 }
 
 /// @brief Handle any generic fault.
 /// @param rsp
-EXTERN_C void idt_handle_generic(Kernel::UIntPtr rsp)
+EXTERN_C void idt_handle_generic(OpenNE::UIntPtr rsp)
 {
-	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
+	auto process = OpenNE::UserProcessScheduler::The().CurrentProcess();
 
-	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
+	if (process.Leak().Status != OpenNE::ProcessStatusKind::kRunning)
 		return;
 
 	kIsScheduling = NO;
@@ -127,22 +127,22 @@ EXTERN_C void idt_handle_generic(Kernel::UIntPtr rsp)
 
 	kout << "KTrace: SIGKILL.\r";
 
-	process.Leak().Status = Kernel::ProcessStatusKind::kKilled;
+	process.Leak().Status = OpenNE::ProcessStatusKind::kKilled;
 
 	process.Leak().Crash();
 }
 
-EXTERN_C Kernel::Void idt_handle_breakpoint(Kernel::UIntPtr rcx, Kernel::UIntPtr rsp)
+EXTERN_C OpenNE::Void idt_handle_breakpoint(OpenNE::UIntPtr rcx, OpenNE::UIntPtr rsp)
 {
-	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
+	auto process = OpenNE::UserProcessScheduler::The().CurrentProcess();
 
-	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
+	if (process.Leak().Status != OpenNE::ProcessStatusKind::kRunning)
 	{
 		/// Log KTrace data.
 
-		kout << "KTrace: RCX: " << Kernel::hex_number(rcx) << endl;
-		kout << "KTrace: RSP: " << Kernel::hex_number(rsp) << endl;
-		kout << "KTrace: CR2: " << Kernel::hex_number((Kernel::UIntPtr)hal_read_cr2()) << endl;
+		kout << "KTrace: RCX: " << OpenNE::hex_number(rcx) << endl;
+		kout << "KTrace: RSP: " << OpenNE::hex_number(rsp) << endl;
+		kout << "KTrace: CR2: " << OpenNE::hex_number((OpenNE::UIntPtr)hal_read_cr2()) << endl;
 
 		while (YES)
 			;
@@ -150,7 +150,7 @@ EXTERN_C Kernel::Void idt_handle_breakpoint(Kernel::UIntPtr rcx, Kernel::UIntPtr
 
 	kIsScheduling = NO;
 
-	kout << "KTrace: RCX: " << Kernel::hex_number(rcx) << endl;
+	kout << "KTrace: RCX: " << OpenNE::hex_number(rcx) << endl;
 	kout << "KTrace: SIGTRAP.\r";
 
 	process.Leak().ProcessSignal.SignalArg = rcx;
@@ -160,16 +160,16 @@ EXTERN_C Kernel::Void idt_handle_breakpoint(Kernel::UIntPtr rcx, Kernel::UIntPtr
 
 	kout << "KTrace: SIGKILL.\r";
 
-	process.Leak().Status = Kernel::ProcessStatusKind::kFrozen;
+	process.Leak().Status = OpenNE::ProcessStatusKind::kFrozen;
 }
 
 /// @brief Handle #UD fault.
 /// @param rsp
-EXTERN_C void idt_handle_ud(Kernel::UIntPtr rsp)
+EXTERN_C void idt_handle_ud(OpenNE::UIntPtr rsp)
 {
-	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
+	auto process = OpenNE::UserProcessScheduler::The().CurrentProcess();
 
-	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
+	if (process.Leak().Status != OpenNE::ProcessStatusKind::kRunning)
 		return;
 
 	kIsScheduling = NO;
@@ -182,7 +182,7 @@ EXTERN_C void idt_handle_ud(Kernel::UIntPtr rsp)
 
 	kout << "KTrace: SIGKILL.\r";
 
-	process.Leak().Status = Kernel::ProcessStatusKind::kKilled;
+	process.Leak().Status = OpenNE::ProcessStatusKind::kKilled;
 
 	process.Leak().Crash();
 }
@@ -190,7 +190,7 @@ EXTERN_C void idt_handle_ud(Kernel::UIntPtr rsp)
 /// @brief Enter syscall from assembly.
 /// @param stack the stack pushed from assembly routine.
 /// @return nothing.
-EXTERN_C Kernel::Void hal_system_call_enter(Kernel::UIntPtr rcx_syscall_index, Kernel::UIntPtr rdx_syscall_struct)
+EXTERN_C OpenNE::Void hal_system_call_enter(OpenNE::UIntPtr rcx_syscall_index, OpenNE::UIntPtr rdx_syscall_struct)
 {
 	if (rcx_syscall_index < kSyscalls.Count())
 	{
@@ -200,7 +200,7 @@ EXTERN_C Kernel::Void hal_system_call_enter(Kernel::UIntPtr rcx_syscall_index, K
 		{
 			if (kSyscalls[rcx_syscall_index].fProc)
 			{
-				(kSyscalls[rcx_syscall_index].fProc)((Kernel::VoidPtr)rdx_syscall_struct);
+				(kSyscalls[rcx_syscall_index].fProc)((OpenNE::VoidPtr)rdx_syscall_struct);
 			}
 			else
 			{
@@ -219,7 +219,7 @@ EXTERN_C Kernel::Void hal_system_call_enter(Kernel::UIntPtr rcx_syscall_index, K
 /// @brief Enter Kernel call from assembly (DDK only).
 /// @param stack the stack pushed from assembly routine.
 /// @return nothing.
-EXTERN_C Kernel::Void hal_kernel_call_enter(Kernel::UIntPtr rcx_kerncall_index, Kernel::UIntPtr rdx_kerncall_struct)
+EXTERN_C OpenNE::Void hal_kernel_call_enter(OpenNE::UIntPtr rcx_kerncall_index, OpenNE::UIntPtr rdx_kerncall_struct)
 {
 	if (rcx_kerncall_index < kKerncalls.Count())
 	{
@@ -229,7 +229,7 @@ EXTERN_C Kernel::Void hal_kernel_call_enter(Kernel::UIntPtr rcx_kerncall_index, 
 		{
 			if (kKerncalls[rcx_kerncall_index].fProc)
 			{
-				(kKerncalls[rcx_kerncall_index].fProc)((Kernel::VoidPtr)rdx_kerncall_struct);
+				(kKerncalls[rcx_kerncall_index].fProc)((OpenNE::VoidPtr)rdx_kerncall_struct);
 			}
 			else
 			{

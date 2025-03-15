@@ -8,7 +8,7 @@
 
 #include <NewKit/Defines.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	template <typename T>
 	class ArrayList final
@@ -55,4 +55,4 @@ namespace Kernel
 	{
 		return ArrayList<ValueType>{val};
 	}
-} // namespace Kernel
+} // namespace OpenNE

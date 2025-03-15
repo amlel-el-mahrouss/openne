@@ -15,7 +15,7 @@
 
 namespace FB
 {
-	using namespace Kernel;
+	using namespace OpenNE;
 
 	/// @brief common User interface class.
 	class UIAccessibilty final

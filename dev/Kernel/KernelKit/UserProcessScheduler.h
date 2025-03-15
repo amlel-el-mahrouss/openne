@@ -26,7 +26,7 @@
 // The current date is: Thu 11/28/2024			  //
 ////////////////////////////////////////////////////
 
-namespace Kernel
+namespace OpenNE
 {
 	//! @note Forward class declarations.
 
@@ -326,7 +326,7 @@ namespace Kernel
 	};
 
 	const UInt32& sched_get_exit_code(void) noexcept;
-} // namespace Kernel
+} // namespace OpenNE
 
 #include <KernelKit/ThreadLocalStorage.h>
 #include <KernelKit/UserProcessScheduler.inl>

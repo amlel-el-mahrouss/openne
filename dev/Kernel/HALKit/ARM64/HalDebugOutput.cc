@@ -9,7 +9,7 @@
 #include <NewKit/Utils.h>
 #include <NewKit/New.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	EXTERN_C void ke_io_write(const Char* bytes)
 	{
@@ -76,8 +76,8 @@ namespace Kernel
 
 	TerminalDevice TerminalDevice::The() noexcept
 	{
-		TerminalDevice out(Kernel::ke_io_write, Kernel::ke_io_read);
+		TerminalDevice out(OpenNE::ke_io_write, OpenNE::ke_io_read);
 		return out;
 	}
 
-} // namespace Kernel
+} // namespace OpenNE

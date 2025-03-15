@@ -49,7 +49,7 @@ EXTERN_C
 #define kTaskGate	   (0b10001100)
 #define kIDTSelector   (0x08)
 
-namespace Kernel
+namespace OpenNE
 {
 	namespace Detail::AMD64
 	{
@@ -64,9 +64,9 @@ namespace Kernel
 			UInt32 Zero; // reserved
 		};
 	} // namespace Detail::AMD64
-} // namespace Kernel
+} // namespace OpenNE
 
-namespace Kernel::HAL
+namespace OpenNE::HAL
 {
 	/// @brief Memory Manager mapping flags.
 	enum
@@ -315,15 +315,15 @@ namespace Kernel::HAL
 	EXTERN_C Void rt_sti();
 	EXTERN_C Void rt_cld();
 	EXTERN_C Void rt_std();
-} // namespace Kernel::HAL
+} // namespace OpenNE::HAL
 
-EXTERN_C Kernel::Void idt_handle_generic(Kernel::UIntPtr rsp);
-EXTERN_C Kernel::Void idt_handle_gpf(Kernel::UIntPtr rsp);
-EXTERN_C Kernel::Void idt_handle_math(Kernel::UIntPtr rsp);
-EXTERN_C Kernel::Void idt_handle_pf(Kernel::UIntPtr rsp);
+EXTERN_C OpenNE::Void idt_handle_generic(OpenNE::UIntPtr rsp);
+EXTERN_C OpenNE::Void idt_handle_gpf(OpenNE::UIntPtr rsp);
+EXTERN_C OpenNE::Void idt_handle_math(OpenNE::UIntPtr rsp);
+EXTERN_C OpenNE::Void idt_handle_pf(OpenNE::UIntPtr rsp);
 
-EXTERN_C ATTRIBUTE(naked) Kernel::Void hal_load_idt(Kernel::HAL::Register64 ptr);
-EXTERN_C ATTRIBUTE(naked) Kernel::Void hal_load_gdt(Kernel::HAL::RegisterGDT ptr);
+EXTERN_C ATTRIBUTE(naked) OpenNE::Void hal_load_idt(OpenNE::HAL::Register64 ptr);
+EXTERN_C ATTRIBUTE(naked) OpenNE::Void hal_load_gdt(OpenNE::HAL::RegisterGDT ptr);
 
-inline Kernel::VoidPtr kKernelBitMpStart = nullptr;
-inline Kernel::UIntPtr kKernelBitMpSize	 = 0UL;
+inline OpenNE::VoidPtr kKernelBitMpStart = nullptr;
+inline OpenNE::UIntPtr kKernelBitMpSize	 = 0UL;

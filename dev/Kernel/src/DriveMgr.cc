@@ -17,7 +17,7 @@
 /// @brief Drive Manager of openne.
 /***********************************************************************************/
 
-namespace Kernel
+namespace OpenNE
 {
 #if defined(__ATA_PIO__) || defined(__ATA_DMA__)
 	STATIC UInt16 kATAIO	 = 0U;
@@ -147,7 +147,7 @@ namespace Kernel
 		return trait;
 	}
 
-	namespace Detect
+	namespace Detail
 	{
 		Void io_detect_drive(DriveTrait& trait)
 		{
@@ -169,7 +169,7 @@ namespace Kernel
 				trait.fPacket.fPacketReadOnly = NO;
 				trait.fKind					  = kMassStorageDisc | kEPMDrive;
 
-				kout << "Disk is EPM partitioned.\r";
+				kout << "Disk is EPM.\r";
 
 				trait.fSectorSz = block_struct.SectorSz;
 				trait.fLbaEnd	= block_struct.LbaEnd;
@@ -192,7 +192,7 @@ namespace Kernel
 				block_struct.Name[kEPMNameLength - 1] = 0;
 
 				if (block_struct.Name[0] == 0)
-					kout << "Disk partition is empty (Read Only)\r";
+					kout << "Disk partition is invalid (Read Only)\r";
 				else
 					kout << "Scheme Found: " << block_struct.Name << endl;
 			}
@@ -206,7 +206,7 @@ namespace Kernel
 			trait.fPacket.fPacketSize	   = 0UL;
 			trait.fPacket.fPacketContent   = nullptr;
 		}
-	} // namespace Detect
+	} // namespace Detail
 
 	/// @brief Fetches the main drive.
 	/// @return the new drive. (returns kEPMDrive if EPM formatted)
@@ -228,7 +228,7 @@ namespace Kernel
 
 		kout << "Detecting partition scheme of: " << trait.fName << ".\r";
 
-		Detect::io_detect_drive(trait);
+		Detail::io_detect_drive(trait);
 
 		if (trait.fPacket.fPacketReadOnly)
 		{
@@ -237,4 +237,4 @@ namespace Kernel
 
 		return trait;
 	}
-} // namespace Kernel
+} // namespace OpenNE

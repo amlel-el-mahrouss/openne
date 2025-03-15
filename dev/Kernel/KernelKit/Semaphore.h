@@ -10,7 +10,7 @@
 #include <KernelKit/Timer.h>
 #include <CompilerKit/CompilerKit.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	class UserProcess;
 
@@ -40,4 +40,4 @@ namespace Kernel
 	private:
 		UserProcessRef fLockingProcess;
 	};
-} // namespace Kernel
+} // namespace OpenNE

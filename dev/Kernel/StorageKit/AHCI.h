@@ -10,7 +10,7 @@
 #include <KernelKit/DriveMgr.h>
 #include <NewKit/OwnPtr.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	class AHCIDeviceInterface OPENNE_DEVICE<MountpointInterface*>
 	{
@@ -30,4 +30,4 @@ namespace Kernel
 	private:
 		void (*fCleanup)(void) = {nullptr};
 	};
-} // namespace Kernel
+} // namespace OpenNE

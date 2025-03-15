@@ -15,7 +15,7 @@
 #define cPCIFuncCount	(8)
 #define cPCIBusCount	(255)
 
-namespace Kernel::PCI
+namespace OpenNE::PCI
 {
 	// model
 	struct DeviceHeader
@@ -56,4 +56,4 @@ namespace Kernel::PCI
 		Detail::BAR BAR4;
 		Detail::BAR BAR5;
 	};
-} // namespace Kernel::PCI
+} // namespace OpenNE::PCI

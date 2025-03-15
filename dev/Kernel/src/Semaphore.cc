@@ -7,7 +7,7 @@
 #include <KernelKit/UserProcessScheduler.h>
 #include <KernelKit/Semaphore.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	/***********************************************************************************/
 	/// @brief Unlocks process out of the semaphore.
@@ -66,4 +66,4 @@ namespace Kernel
 		while (fLockingProcess)
 			;
 	}
-} // namespace Kernel
+} // namespace OpenNE

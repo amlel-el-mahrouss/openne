@@ -24,7 +24,7 @@
 #error !!! unknown architecture !!!
 #endif
 
-namespace Kernel
+namespace OpenNE
 {
 	inline SSizeT rt_hash_seed(const Char* seed, int mul)
 	{
@@ -63,16 +63,16 @@ namespace Kernel
 	{
 		auto mm_is_bitmap(VoidPtr ptr) -> Bool;
 	}
-} // namespace Kernel
+} // namespace OpenNE
 
 #define kKernelMaxSystemCalls (256)
 
-typedef Kernel::Void (*rt_syscall_proc)(Kernel::VoidPtr);
+typedef OpenNE::Void (*rt_syscall_proc)(OpenNE::VoidPtr);
 
 struct HAL_SYSCALL_RECORD final
 {
-	Kernel::Int64	fHash;
-	Kernel::Bool	fHooked;
+	OpenNE::Int64	fHash;
+	OpenNE::Bool	fHooked;
 	rt_syscall_proc fProc;
 
 	operator bool()
@@ -81,12 +81,12 @@ struct HAL_SYSCALL_RECORD final
 	}
 };
 
-inline Kernel::Array<HAL_SYSCALL_RECORD,
+inline OpenNE::Array<HAL_SYSCALL_RECORD,
 					 kKernelMaxSystemCalls>
 	kSyscalls;
 
-inline Kernel::Array<HAL_SYSCALL_RECORD,
+inline OpenNE::Array<HAL_SYSCALL_RECORD,
 					 kKernelMaxSystemCalls>
 	kKerncalls;
 
-EXTERN_C Kernel::HAL::StackFramePtr mp_get_current_context(Kernel::Int64 pid);
+EXTERN_C OpenNE::HAL::StackFramePtr mp_get_current_context(OpenNE::Int64 pid);

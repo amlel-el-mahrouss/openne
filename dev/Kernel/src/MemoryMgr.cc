@@ -31,7 +31,7 @@
 #define kKernelHeapAlignSz (4U)
 #endif
 
-namespace Kernel
+namespace OpenNE
 {
 	/// @brief Contains data structures and algorithms for the heap.
 	namespace Detail
@@ -299,4 +299,4 @@ namespace Kernel
 
 		return No;
 	}
-} // namespace Kernel
+} // namespace OpenNE

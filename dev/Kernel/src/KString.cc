@@ -10,7 +10,7 @@
 /// @file KString.cc
 /// @brief Kernel String manipulation file.
 
-namespace Kernel
+namespace OpenNE
 {
 	Char* KString::Data()
 	{
@@ -214,4 +214,4 @@ namespace Kernel
 
 		return *this;
 	}
-} // namespace Kernel
+} // namespace OpenNE

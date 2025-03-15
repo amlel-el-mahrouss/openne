@@ -29,62 +29,62 @@
 
 typedef struct LDR_EXEC_HEADER final
 {
-	Kernel::UInt32 mSignature;
-	Kernel::UInt16 mMachine;
-	Kernel::UInt16 mNumberOfSections;
-	Kernel::UInt32 mTimeDateStamp;
-	Kernel::UInt32 mPointerToSymbolTable;
-	Kernel::UInt32 mNumberOfSymbols;
-	Kernel::UInt16 mSizeOfOptionalHeader;
-	Kernel::UInt16 mCharacteristics;
+	OpenNE::UInt32 mSignature;
+	OpenNE::UInt16 mMachine;
+	OpenNE::UInt16 mNumberOfSections;
+	OpenNE::UInt32 mTimeDateStamp;
+	OpenNE::UInt32 mPointerToSymbolTable;
+	OpenNE::UInt32 mNumberOfSymbols;
+	OpenNE::UInt16 mSizeOfOptionalHeader;
+	OpenNE::UInt16 mCharacteristics;
 } LDR_EXEC_HEADER, *LDR_EXEC_HEADER_PTR;
 
 typedef struct LDR_OPTIONAL_HEADER final
 {
-	Kernel::UInt16 mMagic; // 0x010b - PE32, 0x020b - PE32+ (64 bit)
-	Kernel::UInt8  mMajorLinkerVersion;
-	Kernel::UInt8  mMinorLinkerVersion;
-	Kernel::UInt32 mSizeOfCode;
-	Kernel::UInt32 mSizeOfInitializedData;
-	Kernel::UInt32 mSizeOfUninitializedData;
-	Kernel::UInt32 mAddressOfEntryPoint;
-	Kernel::UInt32 mBaseOfCode;
-	Kernel::UInt32 mBaseOfData;
-	Kernel::UInt32 mImageBase;
-	Kernel::UInt32 mSectionAlignment;
-	Kernel::UInt32 mFileAlignment;
-	Kernel::UInt16 mMajorOperatingSystemVersion;
-	Kernel::UInt16 mMinorOperatingSystemVersion;
-	Kernel::UInt16 mMajorImageVersion;
-	Kernel::UInt16 mMinorImageVersion;
-	Kernel::UInt16 mMajorSubsystemVersion;
-	Kernel::UInt16 mMinorSubsystemVersion;
-	Kernel::UInt32 mWin32VersionValue;
-	Kernel::UInt32 mSizeOfImage;
-	Kernel::UInt32 mSizeOfHeaders;
-	Kernel::UInt32 mCheckSum;
-	Kernel::UInt16 mSubsystem;
-	Kernel::UInt16 mDllCharacteristics;
-	Kernel::UInt32 mSizeOfStackReserve;
-	Kernel::UInt32 mSizeOfStackCommit;
-	Kernel::UInt32 mSizeOfHeapReserve;
-	Kernel::UInt32 mSizeOfHeapCommit;
-	Kernel::UInt32 mLoaderFlags;
-	Kernel::UInt32 mNumberOfRvaAndSizes;
+	OpenNE::UInt16 mMagic; // 0x010b - PE32, 0x020b - PE32+ (64 bit)
+	OpenNE::UInt8  mMajorLinkerVersion;
+	OpenNE::UInt8  mMinorLinkerVersion;
+	OpenNE::UInt32 mSizeOfCode;
+	OpenNE::UInt32 mSizeOfInitializedData;
+	OpenNE::UInt32 mSizeOfUninitializedData;
+	OpenNE::UInt32 mAddressOfEntryPoint;
+	OpenNE::UInt32 mBaseOfCode;
+	OpenNE::UInt32 mBaseOfData;
+	OpenNE::UInt32 mImageBase;
+	OpenNE::UInt32 mSectionAlignment;
+	OpenNE::UInt32 mFileAlignment;
+	OpenNE::UInt16 mMajorOperatingSystemVersion;
+	OpenNE::UInt16 mMinorOperatingSystemVersion;
+	OpenNE::UInt16 mMajorImageVersion;
+	OpenNE::UInt16 mMinorImageVersion;
+	OpenNE::UInt16 mMajorSubsystemVersion;
+	OpenNE::UInt16 mMinorSubsystemVersion;
+	OpenNE::UInt32 mWin32VersionValue;
+	OpenNE::UInt32 mSizeOfImage;
+	OpenNE::UInt32 mSizeOfHeaders;
+	OpenNE::UInt32 mCheckSum;
+	OpenNE::UInt16 mSubsystem;
+	OpenNE::UInt16 mDllCharacteristics;
+	OpenNE::UInt32 mSizeOfStackReserve;
+	OpenNE::UInt32 mSizeOfStackCommit;
+	OpenNE::UInt32 mSizeOfHeapReserve;
+	OpenNE::UInt32 mSizeOfHeapCommit;
+	OpenNE::UInt32 mLoaderFlags;
+	OpenNE::UInt32 mNumberOfRvaAndSizes;
 } LDR_OPTIONAL_HEADER, *LDR_OPTIONAL_HEADER_PTR;
 
 typedef struct LDR_SECTION_HEADER final
 {
-	Kernel::Char   mName[8];
-	Kernel::UInt32 mVirtualSize;
-	Kernel::UInt32 mVirtualAddress;
-	Kernel::UInt32 mSizeOfRawData;
-	Kernel::UInt32 mPointerToRawData;
-	Kernel::UInt32 mPointerToRelocations;
-	Kernel::UInt32 mPointerToLineNumbers;
-	Kernel::UInt16 mNumberOfRelocations;
-	Kernel::UInt16 mNumberOfLinenumbers;
-	Kernel::UInt32 mCharacteristics;
+	OpenNE::Char   mName[8];
+	OpenNE::UInt32 mVirtualSize;
+	OpenNE::UInt32 mVirtualAddress;
+	OpenNE::UInt32 mSizeOfRawData;
+	OpenNE::UInt32 mPointerToRawData;
+	OpenNE::UInt32 mPointerToRelocations;
+	OpenNE::UInt32 mPointerToLineNumbers;
+	OpenNE::UInt16 mNumberOfRelocations;
+	OpenNE::UInt16 mNumberOfLinenumbers;
+	OpenNE::UInt32 mCharacteristics;
 } LDR_SECTION_HEADER, *LDR_SECTION_HEADER_PTR;
 
 enum kExecDataDirParams
@@ -97,35 +97,35 @@ enum kExecDataDirParams
 
 typedef struct LDR_EXPORT_DIRECTORY
 {
-	Kernel::UInt32 mCharacteristics;
-	Kernel::UInt32 mTimeDateStamp;
-	Kernel::UInt16 mMajorVersion;
-	Kernel::UInt16 mMinorVersion;
-	Kernel::UInt32 mName;
-	Kernel::UInt32 mBase;
-	Kernel::UInt32 mNumberOfFunctions;
-	Kernel::UInt32 mNumberOfNames;
-	Kernel::UInt32 mAddressOfFunctions; // export table rva
-	Kernel::UInt32 mAddressOfNames;
-	Kernel::UInt32 mAddressOfNameOrdinal; // ordinal table rva
+	OpenNE::UInt32 mCharacteristics;
+	OpenNE::UInt32 mTimeDateStamp;
+	OpenNE::UInt16 mMajorVersion;
+	OpenNE::UInt16 mMinorVersion;
+	OpenNE::UInt32 mName;
+	OpenNE::UInt32 mBase;
+	OpenNE::UInt32 mNumberOfFunctions;
+	OpenNE::UInt32 mNumberOfNames;
+	OpenNE::UInt32 mAddressOfFunctions; // export table rva
+	OpenNE::UInt32 mAddressOfNames;
+	OpenNE::UInt32 mAddressOfNameOrdinal; // ordinal table rva
 } LDR_EXPORT_DIRECTORY, *LDR_EXPORT_DIRECTORY_PTR;
 
 typedef struct LDR_IMPORT_DIRECTORY
 {
 	union {
-		Kernel::UInt32 mCharacteristics;
-		Kernel::UInt32 mOriginalFirstThunk;
+		OpenNE::UInt32 mCharacteristics;
+		OpenNE::UInt32 mOriginalFirstThunk;
 	};
-	Kernel::UInt32 mTimeDateStamp;
-	Kernel::UInt32 mForwarderChain;
-	Kernel::UInt32 mNameRva;
-	Kernel::UInt32 mThunkTableRva;
+	OpenNE::UInt32 mTimeDateStamp;
+	OpenNE::UInt32 mForwarderChain;
+	OpenNE::UInt32 mNameRva;
+	OpenNE::UInt32 mThunkTableRva;
 } LDR_IMPORT_DIRECTORY, *LDR_IMPORT_DIRECTORY_PTR;
 
 typedef struct LDR_DATA_DIRECTORY
 {
-	Kernel::UInt32 VirtualAddress;
-	Kernel::UInt32 Size;
+	OpenNE::UInt32 VirtualAddress;
+	OpenNE::UInt32 Size;
 } LDR_DATA_DIRECTORY, *LDR_DATA_DIRECTORY_PTR;
 
 typedef struct LDR_IMAGE_HEADER

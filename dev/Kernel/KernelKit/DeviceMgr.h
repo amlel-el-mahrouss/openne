@@ -24,11 +24,11 @@
 
 #define kDeviceMgrRootDirPath "/Devices/"
 
-#define OPENNE_DEVICE : public ::Kernel::IDeviceObject
+#define OPENNE_DEVICE : public ::OpenNE::IDeviceObject
 
 // Last Rev: Wed, Apr  3, 2024  9:09:41 AM
 
-namespace Kernel
+namespace OpenNE
 {
 	template <typename T>
 	class IDeviceObject;
@@ -137,4 +137,4 @@ namespace Kernel
 		kDeviceTypeMediaCtrl, // MM controller
 		kDeviceTypeCount,
 	};
-} // namespace Kernel
+} // namespace OpenNE

@@ -12,4 +12,4 @@
 /// @brief Serial SCSI driver.
 
 template <int PacketBitLen>
-using scsi_packet_type = Kernel::UInt16[PacketBitLen];
+using scsi_packet_type = OpenNE::UInt16[PacketBitLen];

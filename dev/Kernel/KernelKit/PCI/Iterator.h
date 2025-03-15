@@ -17,7 +17,7 @@
 #define OPENNE_DEVICE_COUNT	  (33)
 #define OPENNE_FUNCTION_COUNT (8)
 
-namespace Kernel::PCI
+namespace OpenNE::PCI
 {
 	class Iterator final
 	{
@@ -38,6 +38,6 @@ namespace Kernel::PCI
 	private:
 		Array<PCI::Device, OPENNE_BUS_COUNT> fDevices;
 	};
-} // namespace Kernel::PCI
+} // namespace OpenNE::PCI
 
 #endif // __PCI_ITERATOR_H__

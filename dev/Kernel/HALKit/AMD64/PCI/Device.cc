@@ -7,30 +7,30 @@
 #include <ArchKit/ArchKit.h>
 #include <KernelKit/PCI/Device.h>
 
-Kernel::UInt pci_read_raw(Kernel::UInt bar, Kernel::UShort bus, Kernel::UShort dev, Kernel::UShort fun)
+OpenNE::UInt pci_read_raw(OpenNE::UInt bar, OpenNE::UShort bus, OpenNE::UShort dev, OpenNE::UShort fun)
 {
-	Kernel::UInt target = 0x80000000 | ((Kernel::UInt)bus << 16) |
-						  ((Kernel::UInt)dev << 11) | ((Kernel::UInt)fun << 8) |
+	OpenNE::UInt target = 0x80000000 | ((OpenNE::UInt)bus << 16) |
+						  ((OpenNE::UInt)dev << 11) | ((OpenNE::UInt)fun << 8) |
 						  (bar & 0xFC);
 
-	Kernel::HAL::rt_out32((Kernel::UShort)Kernel::PCI::PciConfigKind::ConfigAddress,
+	OpenNE::HAL::rt_out32((OpenNE::UShort)OpenNE::PCI::PciConfigKind::ConfigAddress,
 						  target);
 
-	Kernel::HAL::rt_wait_400ns();
+	OpenNE::HAL::rt_wait_400ns();
 
-	return Kernel::HAL::rt_in32((Kernel::UShort)Kernel::PCI::PciConfigKind::ConfigData);
+	return OpenNE::HAL::rt_in32((OpenNE::UShort)OpenNE::PCI::PciConfigKind::ConfigData);
 }
 
-void pci_set_cfg_target(Kernel::UInt bar, Kernel::UShort bus, Kernel::UShort dev, Kernel::UShort fun)
+void pci_set_cfg_target(OpenNE::UInt bar, OpenNE::UShort bus, OpenNE::UShort dev, OpenNE::UShort fun)
 {
-	Kernel::UInt target = 0x80000000 | ((Kernel::UInt)bus << 16) |
-						  ((Kernel::UInt)dev << 11) | ((Kernel::UInt)fun << 8) |
+	OpenNE::UInt target = 0x80000000 | ((OpenNE::UInt)bus << 16) |
+						  ((OpenNE::UInt)dev << 11) | ((OpenNE::UInt)fun << 8) |
 						  (bar & 0xFC);
 
-	Kernel::HAL::rt_out32((Kernel::UShort)Kernel::PCI::PciConfigKind::ConfigAddress,
+	OpenNE::HAL::rt_out32((OpenNE::UShort)OpenNE::PCI::PciConfigKind::ConfigAddress,
 						  target);
 
-	Kernel::HAL::rt_wait_400ns();
+	OpenNE::HAL::rt_wait_400ns();
 }
 
 #define PCI_BAR_IO		 0x01
@@ -38,7 +38,7 @@ void pci_set_cfg_target(Kernel::UInt bar, Kernel::UShort bus, Kernel::UShort dev
 #define PCI_BAR_64		 0x04
 #define PCI_BAR_PREFETCH 0x08
 
-namespace Kernel::PCI
+namespace OpenNE::PCI
 {
 	Device::Device(UShort bus, UShort device, UShort func, UInt32 bar)
 		: fBus(bus), fDevice(device), fFunction(func), fBar(bar)
@@ -168,4 +168,4 @@ namespace Kernel::PCI
 	{
 		return VendorId() != (UShort)PciConfigKind::Invalid;
 	}
-} // namespace Kernel::PCI
+} // namespace OpenNE::PCI

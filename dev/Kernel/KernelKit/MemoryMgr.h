@@ -15,7 +15,7 @@
 #include <KernelKit/LPC.h>
 #include <Hints/CompilerHint.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	/// @brief Declare pointer as free.
 	/// @param heap_ptr the pointer.
@@ -66,7 +66,7 @@ namespace Kernel
 	{
 		if (*cls)
 		{
-			err_global_get() = Kernel::kErrorInvalidData;
+			err_global_get() = OpenNE::kErrorInvalidData;
 			return;
 		}
 
@@ -81,6 +81,6 @@ namespace Kernel
 		delete *cls;
 		*cls = nullptr;
 	}
-} // namespace Kernel
+} // namespace OpenNE
 
 #endif // !INC_KERNEL_HEAP_H

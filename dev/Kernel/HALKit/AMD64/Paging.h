@@ -31,15 +31,15 @@
 #endif // !kAlign
 
 EXTERN_C void hal_flush_tlb();
-EXTERN_C void hal_invl_tlb(Kernel::VoidPtr addr);
-EXTERN_C void hal_write_cr3(Kernel::VoidPtr cr3);
-EXTERN_C void hal_write_cr0(Kernel::VoidPtr bit);
+EXTERN_C void hal_invl_tlb(OpenNE::VoidPtr addr);
+EXTERN_C void hal_write_cr3(OpenNE::VoidPtr cr3);
+EXTERN_C void hal_write_cr0(OpenNE::VoidPtr bit);
 
-EXTERN_C Kernel::VoidPtr hal_read_cr0(); // @brief CPU control register.
-EXTERN_C Kernel::VoidPtr hal_read_cr2(); // @brief Fault address.
-EXTERN_C Kernel::VoidPtr hal_read_cr3(); // @brief Page table.
+EXTERN_C OpenNE::VoidPtr hal_read_cr0(); // @brief CPU control register.
+EXTERN_C OpenNE::VoidPtr hal_read_cr2(); // @brief Fault address.
+EXTERN_C OpenNE::VoidPtr hal_read_cr3(); // @brief Page table.
 
-namespace Kernel::HAL
+namespace OpenNE::HAL
 {
 	/// @brief Final page entry (Not PML, PDPT)
 	struct PACKED OPENNE_PTE final
@@ -90,10 +90,10 @@ namespace Kernel::HAL
 
 	auto mm_alloc_bitmap(Boolean wr, Boolean user, SizeT size, Bool is_page) -> VoidPtr;
 	auto mm_free_bitmap(VoidPtr page_ptr) -> Bool;
-} // namespace Kernel::HAL
+} // namespace OpenNE::HAL
 
-namespace Kernel
+namespace OpenNE
 {
 	typedef HAL::OPENNE_PTE PTE;
 	typedef HAL::OPENNE_PDE PDE;
-} // namespace Kernel
+} // namespace OpenNE

@@ -10,7 +10,7 @@
 #include <NewKit/ErrorOr.h>
 #include <NewKit/Defines.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	template <typename T, SizeT N>
 	class Array final
@@ -55,4 +55,4 @@ namespace Kernel
 	private:
 		T fArray[N];
 	};
-} // namespace Kernel
+} // namespace OpenNE

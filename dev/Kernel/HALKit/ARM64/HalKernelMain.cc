@@ -19,7 +19,7 @@
 #include <CFKit/Property.h>
 
 EXTERN_C void hal_init_platform(
-	Kernel::HEL::BootInfoHeader* handover_hdr)
+	OpenNE::HEL::BootInfoHeader* handover_hdr)
 {
 
 	/************************************************** */
@@ -39,12 +39,12 @@ EXTERN_C void hal_init_platform(
 	/************************************** */
 
 	kKernelBitMpSize  = kHandoverHeader->f_BitMapSize;
-	kKernelBitMpStart = reinterpret_cast<Kernel::VoidPtr>(
-		reinterpret_cast<Kernel::UIntPtr>(kHandoverHeader->f_BitMapStart));
+	kKernelBitMpStart = reinterpret_cast<OpenNE::VoidPtr>(
+		reinterpret_cast<OpenNE::UIntPtr>(kHandoverHeader->f_BitMapStart));
 
 	/// @note do initialize the interrupts after it.
 
-	Kernel::mp_initialize_gic();
+	OpenNE::mp_initialize_gic();
 
 	while (YES)
 	{

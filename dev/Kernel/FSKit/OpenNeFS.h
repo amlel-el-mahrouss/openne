@@ -87,8 +87,8 @@ default.
 #define kNeFSLF	 '\r'
 #define kNeFSEOF (-1)
 
-#define kNeFSBitWidth (sizeof(Kernel::Char))
-#define kNeFSLbaType  (Kernel::Lba)
+#define kNeFSBitWidth (sizeof(OpenNE::Char))
+#define kNeFSLbaType  (OpenNE::Lba)
 
 /// @note Start after the partition map header. (Virtual addressing)
 #define kNeFSRootCatalogStartAddress (1024)
@@ -142,33 +142,33 @@ enum
 /// @brief Catalog type.
 struct PACKED ONEFS_CATALOG_STRUCT final
 {
-	Kernel::Char Name[kNeFSCatalogNameLen] = {0};
-	Kernel::Char Mime[kNeFSMimeNameLen] = {0};
+	OpenNE::Char Name[kNeFSCatalogNameLen] = {0};
+	OpenNE::Char Mime[kNeFSMimeNameLen] = {0};
 
 	/// Catalog flags.
-	Kernel::UInt16 Flags;
+	OpenNE::UInt16 Flags;
 
 	/// Catalog allocation status.
-	Kernel::UInt16 Status;
+	OpenNE::UInt16 Status;
 
 	/// Custom catalog flags.
-	Kernel::UInt16 CatalogFlags;
+	OpenNE::UInt16 CatalogFlags;
 
 	/// Catalog kind.
-	Kernel::Int32 Kind;
+	OpenNE::Int32 Kind;
 
 	/// Size of the data fork.
-	Kernel::Lba DataForkSize;
+	OpenNE::Lba DataForkSize;
 
 	/// Size of all resource forks.
-	Kernel::Lba ResourceForkSize;
+	OpenNE::Lba ResourceForkSize;
 
 	/// Forks LBA.
-	Kernel::Lba DataFork;
-	Kernel::Lba ResourceFork;
+	OpenNE::Lba DataFork;
+	OpenNE::Lba ResourceFork;
 
-	Kernel::Lba NextSibling;
-	Kernel::Lba PrevSibling;
+	OpenNE::Lba NextSibling;
+	OpenNE::Lba PrevSibling;
 };
 
 /// @brief Fork type, contains a data page.
@@ -177,53 +177,53 @@ struct PACKED ONEFS_CATALOG_STRUCT final
 /// whereas the data fork is reserved for file data.
 struct PACKED ONEFS_FORK_STRUCT final
 {
-	Kernel::Char ForkName[kNeFSForkNameLen]	   = {0};
-	Kernel::Char CatalogName[kNeFSCatalogNameLen] = {0};
+	OpenNE::Char ForkName[kNeFSForkNameLen]	   = {0};
+	OpenNE::Char CatalogName[kNeFSCatalogNameLen] = {0};
 
-	Kernel::Int32 Flags;
-	Kernel::Int32 Kind;
+	OpenNE::Int32 Flags;
+	OpenNE::Int32 Kind;
 
-	Kernel::Int64 ResourceId;
-	Kernel::Int32 ResourceKind;
-	Kernel::Int32 ResourceFlags;
+	OpenNE::Int64 ResourceId;
+	OpenNE::Int32 ResourceKind;
+	OpenNE::Int32 ResourceFlags;
 
-	Kernel::Lba	  DataOffset; // 8 Where to look for this data?
-	Kernel::SizeT DataSize;	  /// Data size according using sector count.
+	OpenNE::Lba	  DataOffset; // 8 Where to look for this data?
+	OpenNE::SizeT DataSize;	  /// Data size according using sector count.
 
-	Kernel::Lba NextSibling;
-	Kernel::Lba PreviousSibling;
+	OpenNE::Lba NextSibling;
+	OpenNE::Lba PreviousSibling;
 
-	Kernel::Char Pad[2] = {0};
+	OpenNE::Char Pad[2] = {0};
 };
 
 /// @brief Partition superblock type
 struct PACKED ONEFS_SUPER_BLOCK final
 {
-	Kernel::Char Ident[kNeFSIdentLen]	 = {0};
-	Kernel::Char PartitionName[kPartLen] = {0};
+	OpenNE::Char Ident[kNeFSIdentLen]	 = {0};
+	OpenNE::Char PartitionName[kPartLen] = {0};
 
-	Kernel::Int32 Flags;
-	Kernel::Int32 Kind;
+	OpenNE::Int32 Flags;
+	OpenNE::Int32 Kind;
 
-	Kernel::Lba	  StartCatalog;
-	Kernel::SizeT CatalogCount;
+	OpenNE::Lba	  StartCatalog;
+	OpenNE::SizeT CatalogCount;
 
-	Kernel::SizeT DiskSize;
+	OpenNE::SizeT DiskSize;
 
-	Kernel::SizeT FreeCatalog;
-	Kernel::SizeT FreeSectors;
+	OpenNE::SizeT FreeCatalog;
+	OpenNE::SizeT FreeSectors;
 
-	Kernel::SizeT SectorCount;
-	Kernel::SizeT SectorSize;
+	OpenNE::SizeT SectorCount;
+	OpenNE::SizeT SectorSize;
 
-	Kernel::UInt64 Version;
+	OpenNE::UInt64 Version;
 
-	Kernel::Lba EpmBlock;
+	OpenNE::Lba EpmBlock;
 
-	Kernel::Char Pad[kNeFSPadLen];
+	OpenNE::Char Pad[kNeFSPadLen];
 };
 
-namespace Kernel
+namespace OpenNE
 {
 	class NeFileSystemParser;
 	class NeFileSystemJournal;
@@ -433,4 +433,4 @@ namespace Kernel
 	{
 		Boolean fs_init_nefs(Void) noexcept;
 	} // namespace NeFS
-} // namespace Kernel
+} // namespace OpenNE

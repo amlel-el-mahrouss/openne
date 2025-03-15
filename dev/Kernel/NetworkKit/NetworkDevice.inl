@@ -8,7 +8,7 @@
 	Dtor and ctors.
 */
 
-namespace Kernel
+namespace OpenNE
 {
 	NetworkDevice::NetworkDevice(void (*out)(NetworkDeviceCommand),
 								 void (*in)(NetworkDeviceCommand),
@@ -29,4 +29,4 @@ namespace Kernel
 		if (fCleanup)
 			fCleanup();
 	}
-} // namespace Kernel
+} // namespace OpenNE

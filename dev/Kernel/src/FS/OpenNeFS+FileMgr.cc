@@ -13,7 +13,7 @@
 /// @brief NeFS File manager.
 /// BUGS: 0
 
-namespace Kernel
+namespace OpenNE
 {
 	/// @brief C++ constructor
 	NeFileSystemMgr::NeFileSystemMgr()
@@ -239,7 +239,7 @@ namespace Kernel
 	{
 		return mParser;
 	}
-} // namespace Kernel
+} // namespace OpenNE
 
 #endif // ifdef __FSKIT_INCLUDES_NEFS__
 #endif // ifndef __OPENNE_MINIMAL_OS__

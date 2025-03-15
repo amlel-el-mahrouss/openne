@@ -10,7 +10,7 @@
 
 namespace Firmware::Detail::EFI
 {
-	using namespace Kernel;
+	using namespace OpenNE;
 
 	EXTERN_C
 	{

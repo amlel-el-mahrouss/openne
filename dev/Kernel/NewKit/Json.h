@@ -19,7 +19,7 @@
 #define kJSONLen	 32
 #define kJSONNull	 "null"
 
-namespace Kernel
+namespace OpenNE
 {
 	/// @brief Json class
 	class JSON final
@@ -148,4 +148,4 @@ namespace Kernel
 	};
 
 	using JsonStream = Stream<JsonStreamReader, JSON>;
-} // namespace Kernel
+} // namespace OpenNE

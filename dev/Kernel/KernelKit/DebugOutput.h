@@ -25,7 +25,7 @@
 #define kDebugTeam		 43
 #define kDebugEOP		 49
 
-namespace Kernel
+namespace OpenNE
 {
 	class TerminalDevice;
 	class DTraceDevice;
@@ -206,11 +206,11 @@ namespace Kernel
 		number(src);
 		return src;
 	}
-} // namespace Kernel
+} // namespace OpenNE
 
 #ifdef kout
 #undef kout
 #endif // ifdef kout
 
-#define kout Kernel::TerminalDevice::The()
-#define endl Kernel::end_line()
+#define kout OpenNE::TerminalDevice::The()
+#define endl OpenNE::end_line()

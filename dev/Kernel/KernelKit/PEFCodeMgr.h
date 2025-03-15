@@ -18,7 +18,7 @@
 
 #define kPefApplicationMime "application/vnd-zka-executable"
 
-namespace Kernel
+namespace OpenNE
 {
 	///
 	/// \name PEFLoader
@@ -67,6 +67,6 @@ namespace Kernel
 	{
 		ProcessID rtl_create_process(PEFLoader& exec, const Int32& procKind) noexcept;
 	} // namespace Utils
-} // namespace Kernel
+} // namespace OpenNE
 
 #endif // ifndef _INC_CODE_MANAGER_PEF_H_

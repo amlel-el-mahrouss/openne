@@ -45,7 +45,7 @@
 #define kSATASubClass	(0x06)
 #define kSATABar5		(0x24)
 
-using namespace Kernel;
+using namespace OpenNE;
 
 STATIC PCI::Device kDevice;
 STATIC HbaMem* kSATA					   = nullptr;
@@ -81,7 +81,7 @@ static Void drvi_calculate_disk_geometry() noexcept
 	kout << "Drive Model: " << kCurrentDiskModel << endl;
 
 	kout << "Disk Size: " << number(drv_get_size()) << endl;
-	kout << "Highest Disk LBA: " << number(kCurrentDiskSectorCount) << endl;
+	kout << "Disk Sector Count: " << number(kCurrentDiskSectorCount) << endl;
 }
 
 /// @brief Initializes an AHCI disk.
@@ -89,7 +89,7 @@ static Void drvi_calculate_disk_geometry() noexcept
 /// @return if the disk was successfully initialized or not.
 Boolean drv_std_init(UInt16& pi)
 {
-	using namespace Kernel;
+	using namespace OpenNE;
 
 	PCI::Iterator iterator(Types::PciDeviceKind::MassStorageController);
 

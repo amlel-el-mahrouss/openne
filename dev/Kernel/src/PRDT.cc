@@ -8,7 +8,7 @@
 #include <NewKit/KString.h>
 #include <StorageKit/PRDT.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	/***********************************************************************************/
 	/// @brief constructs a new PRD.
@@ -21,4 +21,4 @@ namespace Kernel
 		prd.Leak().fSectorCount = 0x0;
 		prd.Leak().fEndBit		= 0x0;
 	}
-} // namespace Kernel
+} // namespace OpenNE

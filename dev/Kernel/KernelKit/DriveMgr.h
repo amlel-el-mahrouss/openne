@@ -23,7 +23,7 @@
 
 #define drv_sector_cnt(SIZE, SECTOR_SZ) (((SIZE) + (SECTOR_SZ)) / (SECTOR_SZ))
 
-namespace Kernel
+namespace OpenNE
 {
 	enum
 	{
@@ -169,8 +169,9 @@ namespace Kernel
 	/// @return the new drive as a trait.
 	DriveTrait io_construct_main_drive(Void) noexcept;
 
-	namespace Detect
+	namespace Detail
 	{
+		/// @brief Detect partition scheme of drive.
 		Void io_detect_drive(DriveTrait& trait);
 	}
 
@@ -187,6 +188,6 @@ namespace Kernel
 	/// @param DrvIndex drive index.
 	/// @return
 	Int32 fs_ifs_write(MountpointInterface* Mnt, DriveTrait& DrvTrait, Int32 DrvIndex);
-} // namespace Kernel
+} // namespace OpenNE
 
 #endif /* ifndef INC_DRIVE_MANAGER_H */

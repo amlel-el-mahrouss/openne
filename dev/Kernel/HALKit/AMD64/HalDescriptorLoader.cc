@@ -9,11 +9,11 @@
 
 #define kPITDefaultTicks (1000U)
 
-namespace Kernel::HAL
+namespace OpenNE::HAL
 {
 	namespace Detail
 	{
-		STATIC ::Kernel::Detail::AMD64::InterruptDescriptorAMD64
+		STATIC ::OpenNE::Detail::AMD64::InterruptDescriptorAMD64
 			kInterruptVectorTable[kKernelIdtSize] = {};
 
 		STATIC void hal_set_irq_mask(UInt8 irql);
@@ -88,7 +88,7 @@ namespace Kernel::HAL
 
 		const Int16 kPITTickForScheduler = kPITDefaultTicks;
 
-		volatile ::Kernel::UIntPtr** ptr_ivt = (volatile ::Kernel::UIntPtr**)idt.Base;
+		volatile ::OpenNE::UIntPtr** ptr_ivt = (volatile ::OpenNE::UIntPtr**)idt.Base;
 
 		for (SizeT idt_indx = 0; idt_indx < kKernelIdtSize; ++idt_indx)
 		{
@@ -104,7 +104,7 @@ namespace Kernel::HAL
 		}
 
 		idt.Base  = (UIntPtr)&Detail::kInterruptVectorTable[0];
-		idt.Limit = sizeof(::Kernel::Detail::AMD64::InterruptDescriptorAMD64) *
+		idt.Limit = sizeof(::OpenNE::Detail::AMD64::InterruptDescriptorAMD64) *
 					(kKernelIdtSize);
 
 		hal_load_idt(idt);
@@ -123,4 +123,4 @@ namespace Kernel::HAL
 	{
 		IDTLoader::Load(idt.Leak());
 	}
-} // namespace Kernel::HAL
+} // namespace OpenNE::HAL

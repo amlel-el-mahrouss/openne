@@ -26,24 +26,24 @@
 ///! @file HalTimer.cc
 ///! @brief Hardware Timer (HPET)
 
-namespace Kernel::Detail
+namespace OpenNE::Detail
 {
-	struct HPET_BLOCK : public Kernel::SDT
+	struct HPET_BLOCK : public OpenNE::SDT
 	{
-		Kernel::UInt8  hardware_rev_id;
-		Kernel::UInt8  comparator_count : 5;
-		Kernel::UInt8  counter_size : 1;
-		Kernel::UInt8  reserved : 1;
-		Kernel::UInt8  legacy_replacement : 1;
-		Kernel::UInt16 pci_vendor_id;
+		OpenNE::UInt8  hardware_rev_id;
+		OpenNE::UInt8  comparator_count : 5;
+		OpenNE::UInt8  counter_size : 1;
+		OpenNE::UInt8  reserved : 1;
+		OpenNE::UInt8  legacy_replacement : 1;
+		OpenNE::UInt16 pci_vendor_id;
 		ACPI_ADDRESS   address;
-		Kernel::UInt8  hpet_number;
-		Kernel::UInt16 minimum_tick;
-		Kernel::UInt8  page_protection;
+		OpenNE::UInt8  hpet_number;
+		OpenNE::UInt16 minimum_tick;
+		OpenNE::UInt8  page_protection;
 	} PACKED;
-} // namespace Kernel::Detail
+} // namespace OpenNE::Detail
 
-using namespace Kernel;
+using namespace OpenNE;
 
 HardwareTimer::HardwareTimer(Int64 ms)
 	: fWaitFor(ms)

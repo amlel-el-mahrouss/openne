@@ -10,7 +10,7 @@
 ///! @file Timer.cc
 ///! @brief Software Timer implementation
 
-using namespace Kernel;
+using namespace OpenNE;
 
 /// @brief Unimplemented as it is an interface.
 BOOL TimerInterface::Wait() noexcept

@@ -23,12 +23,12 @@
 #define kMagMz0 'M'
 #define kMagMz1 'Z'
 
-typedef Kernel::UInt32 DosWord;
-typedef Kernel::Long   DosLong;
+typedef OpenNE::UInt32 DosWord;
+typedef OpenNE::Long   DosLong;
 
 typedef struct _DosHeader
 {
-	Kernel::UInt8 eMagic[2];
+	OpenNE::UInt8 eMagic[2];
 	DosWord		  eMagLen;
 	DosWord		  ePagesCount;
 	DosWord		  eCrlc;

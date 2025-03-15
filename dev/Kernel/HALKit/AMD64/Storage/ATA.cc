@@ -20,8 +20,8 @@
 
 #ifdef __ATA_PIO__
 
-using namespace Kernel;
-using namespace Kernel::HAL;
+using namespace OpenNE;
+using namespace OpenNE::HAL;
 
 /// bugs: 0
 
@@ -95,7 +95,7 @@ ATAInit_Retry:
 
 	for (SizeT indexData = 0ul; indexData < kATADataLen; ++indexData)
 	{
-		kATAData[indexData] = Kernel::HAL::rt_in16(IO + ATA_REG_DATA);
+		kATAData[indexData] = OpenNE::HAL::rt_in16(IO + ATA_REG_DATA);
 	}
 
 	OutBus	  = (Bus == ATA_PRIMARY_IO) ? ATA_PRIMARY_IO : ATA_SECONDARY_IO;
@@ -129,7 +129,7 @@ Void drv_std_read(UInt64 Lba, UInt16 IO, UInt8 Master, Char* Buf, SizeT SectorSz
 	for (SizeT IndexOff = 0; IndexOff < Size; ++IndexOff)
 	{
 		drv_std_wait_io(IO);
-		Buf[IndexOff] = Kernel::HAL::rt_in16(IO + ATA_REG_DATA);
+		Buf[IndexOff] = OpenNE::HAL::rt_in16(IO + ATA_REG_DATA);
 		drv_std_wait_io(IO);
 	}
 }
@@ -175,13 +175,13 @@ Boolean drv_std_detected(Void)
 /***
 	@brief Getter, gets the number of sectors inside the drive.
 */
-Kernel::SizeT drv_get_sector_count()
+OpenNE::SizeT drv_get_sector_count()
 {
 	return (kATAData[61] << 16) | kATAData[60];
 }
 
 /// @brief Get the drive size.
-Kernel::SizeT drv_get_size()
+OpenNE::SizeT drv_get_size()
 {
 	return (drv_get_sector_count()) * ATA_SECTOR_SZ;
 }

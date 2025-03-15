@@ -7,7 +7,7 @@
 
 ------------------------------------------- */
 
-namespace Kernel
+namespace OpenNE
 {
 	/***********************************************************************************/
 	/** @brief Free pointer from usage. */
@@ -48,4 +48,4 @@ namespace Kernel
 
 		return No;
 	}
-} // namespace Kernel
+} // namespace OpenNE

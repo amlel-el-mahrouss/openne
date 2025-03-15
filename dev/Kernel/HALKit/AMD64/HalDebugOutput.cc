@@ -11,7 +11,7 @@
 #include <Mod/CoreGfx/FBMgr.h>
 #include <Mod/CoreGfx/TextMgr.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	enum CommStatus
 	{
@@ -183,8 +183,8 @@ namespace Kernel
 
 	TerminalDevice TerminalDevice::The() noexcept
 	{
-		TerminalDevice out(Kernel::ke_io_write, Kernel::ke_io_read);
+		TerminalDevice out(OpenNE::ke_io_write, OpenNE::ke_io_read);
 		return out;
 	}
 
-} // namespace Kernel
+} // namespace OpenNE

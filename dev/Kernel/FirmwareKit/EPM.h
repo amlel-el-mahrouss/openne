@@ -64,17 +64,17 @@ struct EPM_PART_BLOCK;
  */
 struct PACKED EPM_PART_BLOCK
 {
-	Kernel::Char  Magic[kEPMMagicLength];
-	Kernel::Char  Name[kEPMNameLength];
-	Kernel::Int32 Version;
-	Kernel::Int64 NumBlocks;
-	Kernel::Int64 SectorSz;
-	Kernel::Int64 LbaStart; // base offset
-	Kernel::Int64 LbaEnd;	// addition of lba_start to get the end of partition.
-	Kernel::Int16 Kind;
-	Kernel::Int32 FsVersion;
-	Kernel::Char  Fs[kEPMFilesystemLength]; /* OpenNeFS, NeFS, ffs2... */
-	Kernel::Char  Reserved[kEPMReserveLen]; // to fill a full sector.
+	OpenNE::Char  Magic[kEPMMagicLength];
+	OpenNE::Char  Name[kEPMNameLength];
+	OpenNE::Int32 Version;
+	OpenNE::Int64 NumBlocks;
+	OpenNE::Int64 SectorSz;
+	OpenNE::Int64 LbaStart; // base offset
+	OpenNE::Int64 LbaEnd;	// addition of lba_start to get the end of partition.
+	OpenNE::Int16 Kind;
+	OpenNE::Int32 FsVersion;
+	OpenNE::Char  Fs[kEPMFilesystemLength]; /* OpenNeFS, NeFS, ffs2... */
+	OpenNE::Char  Reserved[kEPMReserveLen]; // to fill a full sector.
 };
 
 ///! @brief Version kind enum.

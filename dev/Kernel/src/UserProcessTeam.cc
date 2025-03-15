@@ -11,7 +11,7 @@
 
 #include <KernelKit/UserProcessScheduler.h>
 
-namespace Kernel
+namespace OpenNE
 {
 	UserProcessTeam::UserProcessTeam()
 	{
@@ -53,6 +53,6 @@ namespace Kernel
 	{
 		return this->mCurrentProcess;
 	}
-} // namespace Kernel
+} // namespace OpenNE
 
 // last rev 05-03-24

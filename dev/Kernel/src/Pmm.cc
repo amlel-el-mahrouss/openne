@@ -15,7 +15,7 @@
 #include <HALKit/AMD64/Processor.h>
 #endif // defined(__OPENNE_AMD64__)
 
-namespace Kernel
+namespace OpenNE
 {
 	/***********************************************************************************/
 	/// @brief Pmm constructor.
@@ -95,4 +95,4 @@ namespace Kernel
 
 		return true;
 	}
-} // namespace Kernel
+} // namespace OpenNE

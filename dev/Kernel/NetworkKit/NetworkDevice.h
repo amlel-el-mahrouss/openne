@@ -12,7 +12,7 @@
 
 /// @note Can either work with: Ethernet, GPRS, WiFi
 
-namespace Kernel
+namespace OpenNE
 {
 	struct NetworkDeviceCommand;
 	class NetworkDevice;
@@ -76,7 +76,7 @@ namespace Kernel
 
 	/// @brief LTE device.
 	using LTENetworkDevice = NetworkDevice;
-} // namespace Kernel
+} // namespace OpenNE
 
 #include <NetworkKit/NetworkDevice.inl>
 

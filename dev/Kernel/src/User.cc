@@ -22,7 +22,7 @@
 /// @file User.cc
 /// @brief User support.
 
-namespace Kernel
+namespace OpenNE
 {
 	namespace Detail
 	{
@@ -185,4 +185,4 @@ namespace Kernel
 	{
 		return this->Ring() == UserRingKind::kRingSuperUser;
 	}
-} // namespace Kernel
+} // namespace OpenNE

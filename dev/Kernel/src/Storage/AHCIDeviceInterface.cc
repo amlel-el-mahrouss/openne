@@ -6,7 +6,7 @@
 
 #include <StorageKit/AHCI.h>
 
-using namespace Kernel;
+using namespace OpenNE;
 
 /// @brief Class constructor
 /// @param Out Drive output

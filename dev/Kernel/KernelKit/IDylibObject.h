@@ -14,7 +14,7 @@
 
 #define OPENNE_DLL_OBJECT : public IDylibObject
 
-namespace Kernel
+namespace OpenNE
 {
 	/// @brief DLL class object. A handle to a shared library.
 	class IDylibObject
@@ -45,4 +45,4 @@ namespace Kernel
 
 	/// @brief Pure implementation, missing method/function handler.
 	EXTERN_C void __zka_pure_call(void);
-} // namespace Kernel
+} // namespace OpenNE

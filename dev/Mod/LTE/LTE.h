@@ -16,25 +16,25 @@ Purpose: LTE Standard Library.
 /// @brief Long Term Evolution I/O routines.
 
 /// @brief Turn on SIM slot.
-Kernel::Boolean lte_turn_on_sim(Kernel::Int32 simSlot);
+OpenNE::Boolean lte_turn_on_sim(OpenNE::Int32 simSlot);
 
 /// @brief Turn off SIM slot.
-Kernel::Boolean lte_turn_off_sim(Kernel::Int32 simSlot);
+OpenNE::Boolean lte_turn_off_sim(OpenNE::Int32 simSlot);
 
 /// @brief Send AT command.
-Kernel::Boolean lte_send_at_command(Kernel::Char* buf,
-									Kernel::Size  bufReadSz,
-									Kernel::Int32 simSlot);
+OpenNE::Boolean lte_send_at_command(OpenNE::Char* buf,
+									OpenNE::Size  bufReadSz,
+									OpenNE::Int32 simSlot);
 
-Kernel::Boolean lte_write_sim_file(Kernel::Char*   file,
-								   Kernel::VoidPtr buf,
-								   Kernel::Size	   bufSz,
-								   Kernel::Size	   offset,
-								   Kernel::Int32   simSlot);
+OpenNE::Boolean lte_write_sim_file(OpenNE::Char*   file,
+								   OpenNE::VoidPtr buf,
+								   OpenNE::Size	   bufSz,
+								   OpenNE::Size	   offset,
+								   OpenNE::Int32   simSlot);
 
-Kernel::VoidPtr lte_read_sim_file(Kernel::Char* file,
-								  Kernel::Size	bufSz,
-								  Kernel::Size	offset,
-								  Kernel::Int32 simSlot);
+OpenNE::VoidPtr lte_read_sim_file(OpenNE::Char* file,
+								  OpenNE::Size	bufSz,
+								  OpenNE::Size	offset,
+								  OpenNE::Int32 simSlot);
 
 #endif // ifndef _INC_NETWORK_LTE_H_
