@@ -2,6 +2,10 @@
 
 # OpenNE
 
+## Starting from now, OpenNE has been deprecated in favor of NeKernel.
+
+You can find the link here: https://github.com/devrije/kernel
+
 ![res/openne.png](res/openne.png)
 
 ## Screenshots:
